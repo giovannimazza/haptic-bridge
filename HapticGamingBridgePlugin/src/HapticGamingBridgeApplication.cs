@@ -1,9 +1,9 @@
-namespace Loupedeck.HapticPlugin
+namespace Loupedeck.HapticGamingBridgePlugin
 {
     using System;
 
     // Required by the plugin loader even for plugins with no target application.
-    public class HapticApplication : ClientApplication
+    public class HapticGamingBridgeApplication : ClientApplication
     {
         protected override String GetProcessName() => "";
 

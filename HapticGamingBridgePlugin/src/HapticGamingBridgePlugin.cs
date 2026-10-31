@@ -1,4 +1,4 @@
-namespace Loupedeck.HapticPlugin
+namespace Loupedeck.HapticGamingBridgePlugin
 {
     using System;
     using System.IO;
@@ -10,9 +10,9 @@ namespace Loupedeck.HapticPlugin
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class HapticPlugin : Plugin
+    public class HapticGamingBridgePlugin : Plugin
     {
-        public const String PipeName = "HapticBridge";
+        public const String PipeName = "HapticGamingBridge";
 
         private const Int32 MaxLineLength = 64;   // longest declared event name is far shorter
         private const Int32 MaxClients = 4;       // a silent client must not be able to lock everyone else out
@@ -25,7 +25,7 @@ namespace Loupedeck.HapticPlugin
         public override Boolean UsesApplicationApiOnly => true;
         public override Boolean HasNoApplication => true;
 
-        public HapticPlugin()
+        public HapticGamingBridgePlugin()
         {
             PluginLog.Init(this.Log);
             PluginResources.Init(this.Assembly);

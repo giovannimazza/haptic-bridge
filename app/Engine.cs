@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HapticBridge
+namespace HapticGamingBridge
 {
     // Pure input -> haptic logic; clock, sender and modifier lookup are injected so it can be tested.
     public class Engine

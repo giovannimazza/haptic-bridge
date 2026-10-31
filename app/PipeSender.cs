@@ -4,7 +4,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 
-namespace HapticBridge
+namespace HapticGamingBridge
 {
     // Sends event names to the Logi plugin; writes happen off the hook thread so the hook never blocks input.
     public class PipeSender : IDisposable
@@ -28,7 +28,7 @@ namespace HapticBridge
                     {
                         if (w == null)
                         {
-                            pipe = new NamedPipeClientStream(".", "HapticBridge", PipeDirection.Out);
+                            pipe = new NamedPipeClientStream(".", "HapticGamingBridge", PipeDirection.Out);
                             pipe.Connect(200);
                             w = new StreamWriter(pipe) { AutoFlush = true };
                         }

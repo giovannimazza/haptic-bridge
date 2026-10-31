@@ -1,7 +1,7 @@
-using HapticBridge;
+using HapticGamingBridge;
 using Xunit;
 
-namespace HapticBridge.Tests
+namespace HapticGamingBridge.Tests
 {
     public class EngineTests
     {

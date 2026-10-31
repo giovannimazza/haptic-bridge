@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace HapticBridge
+namespace HapticGamingBridge
 {
     public partial class PickerWindow : Window
     {

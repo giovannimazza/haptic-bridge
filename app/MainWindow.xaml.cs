@@ -11,12 +11,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace HapticBridge
+namespace HapticGamingBridge
 {
     public partial class MainWindow : Window
     {
         private static readonly string ProfilesPath =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HapticBridge", "profiles.json");
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HapticGamingBridge", "profiles.json");
 
         private readonly ObservableCollection<Profile> _profiles = new();
         private readonly PipeSender _sender = new();
@@ -57,7 +57,7 @@ namespace HapticBridge
             _testTimer.Tick += (_, _) => FireTest();
 
             _tray.Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/icon.ico")).Stream);
-            _tray.Text = "Haptic Bridge";
+            _tray.Text = "Haptic Gaming Bridge";
             _tray.Visible = true;
             _tray.DoubleClick += (_, _) => { Show(); WindowState = WindowState.Normal; Activate(); };
             var menu = new System.Windows.Forms.ContextMenuStrip();
@@ -115,6 +115,7 @@ namespace HapticBridge
         {
             try
             {
+                ProfileStore.Migrate(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HapticBridge", "profiles.json"), ProfilesPath);
                 foreach (var p in ProfileStore.Load(ProfilesPath)) _profiles.Add(p);
             }
             catch (Exception ex) { DialogWindow.Info(null, "Profiles not readable", "Profiles could not be read, starting empty: " + ex.Message); }

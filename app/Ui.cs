@@ -9,7 +9,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace HapticBridge
+namespace HapticGamingBridge
 {
     public static class IconCache
     {

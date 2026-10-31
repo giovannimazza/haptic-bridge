@@ -8,10 +8,10 @@
 |---|---|
 | OSI-approved license, no dual licensing | `LICENSE` (MIT) |
 | Automated, verifiable build | `.github/workflows/release.yml` |
-| Same product name and version in every signed file | `app/app.csproj` (`Product`, `Version`) and the `VersionInfo*` lines in `installer/HapticBridge.iss`; both are checked by the artifact configurations |
+| Same product name and version in every signed file | `app/app.csproj` (`Product`, `Version`) and the `VersionInfo*` lines in `installer/HapticGamingBridge.iss`; both are checked by the artifact configurations |
 | Artifact configurations | `docs/signpath/app.xml`, `docs/signpath/installer.xml` |
 | Code signing policy and privacy policy on the project page | `README.md` |
-| Only own binaries are signed | `app.xml` lists `HapticBridge.exe` and `HapticBridge.dll`; Microsoft runtime files are already signed by Microsoft |
+| Only own binaries are signed | `app.xml` lists `HapticGamingBridge.exe` and `HapticGamingBridge.dll`; Microsoft runtime files are already signed by Microsoft |
 
 ## Steps only you can do
 
@@ -35,12 +35,12 @@ If you chose different slugs in SignPath, change them in the workflow (`project-
 ## Notes and limits
 
 - The workflow only signs when the secret exists and the run is for a tag. Without the secret it still builds, and a tag still creates a release, with an **unsigned** installer.
-- The Logi plugin package (`installer/plugin/Haptic_1_0.lplug4`) is built locally and committed, because the plugin needs Logi's `PluginApi.dll` and cannot be built on a CI runner. Rebuild and recommit it whenever the plugin source changes:
+- The Logi plugin package (`installer/plugin/HapticGamingBridge_1_0.lplug4`) is built locally and committed, because the plugin needs Logi's `PluginApi.dll` and cannot be built on a CI runner. Rebuild and recommit it whenever the plugin source changes:
   ```powershell
-  dotnet build HapticPlugin\src -c Release
-  logiplugintool pack .\HapticPlugin\bin\Release\ .\installer\plugin\Haptic_1_0.lplug4
-  logiplugintool verify .\installer\plugin\Haptic_1_0.lplug4
-  dotnet build HapticPlugin\src    # restores the Debug development link
+  dotnet build HapticGamingBridgePlugin\src -c Release
+  logiplugintool pack .\HapticGamingBridgePlugin\bin\Release\ .\installer\plugin\HapticGamingBridge_1_0.lplug4
+  logiplugintool verify .\installer\plugin\HapticGamingBridge_1_0.lplug4
+  dotnet build HapticGamingBridgePlugin\src    # restores the Debug development link
   ```
   The package is not a Windows executable and is not signed by SignPath.
 - I could not check the attribute names in the artifact configurations or the workflow inputs against a live SignPath account. They follow SignPath's published documentation for the GitHub action (v3) and the artifact configuration syntax; if SignPath rejects a request, its error message names the field to fix.

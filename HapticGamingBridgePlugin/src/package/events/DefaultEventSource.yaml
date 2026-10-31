@@ -1,4 +1,4 @@
-displayName: Haptic Bridge
+displayName: Haptic Gaming Bridge
 description: Haptic events driven by the companion desktop app
 events:
   - name: recoil_1

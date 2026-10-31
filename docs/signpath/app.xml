@@ -6,10 +6,10 @@
     <parameter name="version" />
   </parameters>
   <zip-file>
-    <pe-file path="HapticBridge.exe" product-name="Haptic Bridge" product-version="${version}">
+    <pe-file path="HapticGamingBridge.exe" product-name="Haptic Gaming Bridge" product-version="${version}">
       <authenticode-sign/>
     </pe-file>
-    <pe-file path="HapticBridge.dll" product-name="Haptic Bridge" product-version="${version}">
+    <pe-file path="HapticGamingBridge.dll" product-name="Haptic Gaming Bridge" product-version="${version}">
       <authenticode-sign/>
     </pe-file>
   </zip-file>

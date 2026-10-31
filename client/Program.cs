@@ -5,7 +5,7 @@ var name = args.Length > 0 ? args[0] : "recoil_1";
 var count = args.Length > 1 ? int.Parse(args[1]) : 1;
 var interval = args.Length > 2 ? int.Parse(args[2]) : 100;
 
-using var pipe = new NamedPipeClientStream(".", "HapticBridge", PipeDirection.Out);
+using var pipe = new NamedPipeClientStream(".", "HapticGamingBridge", PipeDirection.Out);
 pipe.Connect(3000);
 using var w = new StreamWriter(pipe) { AutoFlush = true };
 for (var i = 0; i < count; i++)

@@ -1,4 +1,4 @@
-namespace Loupedeck.HapticPlugin
+namespace Loupedeck.HapticGamingBridgePlugin
 {
     using System;
 

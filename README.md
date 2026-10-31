@@ -1,4 +1,4 @@
-# Haptic Bridge
+# Haptic Gaming Bridge
 
 Haptic feedback for mouse-and-keyboard games on the **Logitech MX Master 4**.
 
@@ -17,13 +17,13 @@ The Actions SDK lets a plugin raise haptic events, but only from the plugin's ow
  +---------------+   event name    +------------------+   haptic event   +---------------+
  | Desktop app   | --------------> | Logi plugin      | ---------------> | MX Master 4   |
  | (WPF, tray)   |  named pipe     | (Logi Plugin     |  RaiseEvent      | (via Logi     |
- | global hooks, |  HapticBridge| Service, C#)     |                  | Options+)     |
+ | global hooks, |  HapticGamingBridge| Service, C#)     |                  | Options+)     |
  | profiles      |                 |                  |                  |               |
  +---------------+                 +------------------+                  +---------------+
 ```
 
 - **Desktop app** (`app/`): installs global low-level input hooks, detects the foreground game by executable name, applies the active profile (trigger, modifier, cooldown, hold-to-repeat) and sends an event name down the pipe.
-- **Plugin** (`HapticPlugin/`): declares a fixed set of haptic events and maps each one to a built-in Logitech waveform. It reads event names from the pipe and calls `PluginEvents.RaiseEvent`.
+- **Plugin** (`HapticGamingBridgePlugin/`): declares a fixed set of haptic events and maps each one to a built-in Logitech waveform. It reads event names from the pipe and calls `PluginEvents.RaiseEvent`.
 - **Test client** (`client/`): a tiny console tool that sends one event repeatedly, used to measure timing.
 
 ## Features
@@ -31,7 +31,7 @@ The Actions SDK lets a plugin raise haptic events, but only from the plugin's ow
 - Profiles per game, with icon, running indicator and a foreground marker
 - Actions with trigger (key or mouse button), haptic pattern, required modifier (Shift, Control, Alt, Left Mouse, Right Mouse), cooldown and hold-to-repeat
 - Global on/off switch, test button for each pattern, tray icon, dark UI
-- Profiles stored as JSON in `%APPDATA%\HapticBridge\profiles.json`
+- Profiles stored as JSON in `%APPDATA%\HapticGamingBridge\profiles.json`
 
 ## Requirements
 
@@ -43,7 +43,7 @@ The Actions SDK lets a plugin raise haptic events, but only from the plugin's ow
 
 ## Install
 
-Download `HapticBridge-Setup-1.0.0.exe` from the [latest release](https://github.com/giovannimazza/haptic-bridge/releases/latest) and run it. It installs the desktop app for the current user (no administrator prompt) and, if you leave the task ticked, opens the Logi installer for the Options+ plugin. The plugin package is also attached to the release as `Haptic_1_0.lplug4` if you prefer to install it by double-clicking.
+Download `HapticGamingBridge-Setup-1.0.0.exe` from the [latest release](https://github.com/giovannimazza/haptic-bridge/releases/latest) and run it. It installs the desktop app for the current user (no administrator prompt) and, if you leave the task ticked, opens the Logi installer for the Options+ plugin. The plugin package is also attached to the release as `HapticGamingBridge_1_0.lplug4` if you prefer to install it by double-clicking.
 
 The installer is not code-signed, so Windows SmartScreen may warn before running it.
 
@@ -52,7 +52,7 @@ The installer is not code-signed, so Windows SmartScreen may warn before running
 Plugin (building also links it into the Logi Plugin Service and reloads it):
 
 ```powershell
-cd HapticPlugin
+cd HapticGamingBridgePlugin
 dotnet build src
 ```
 
@@ -61,7 +61,7 @@ Desktop app:
 ```powershell
 cd app
 dotnet build
-.\bin\Debug\net10.0-windows\HapticBridge.exe
+.\bin\Debug\net10.0-windows\HapticGamingBridge.exe
 ```
 
 Quick check without a game: run the app, create a profile for any open program, add an action, then press the mapped input in that program. The status pill in the header shows whether the plugin has received events.
@@ -69,8 +69,8 @@ Quick check without a game: run the app, create a profile for any open program, 
 Logic self-check (cooldown, repeat, modifiers, global switch):
 
 ```powershell
-.\app\bin\Debug\net10.0-windows\HapticBridge.exe --selftest
-Get-Content $env:TEMP\haptic-bridge-selftest.txt   # prints "ok"
+.\app\bin\Debug\net10.0-windows\HapticGamingBridge.exe --selftest
+Get-Content $env:TEMP\haptic-gaming-bridge-selftest.txt   # prints "ok"
 ```
 
 ## Haptic patterns
@@ -88,7 +88,7 @@ Patterns are fixed. The SDK only offers predefined waveforms, so adding a patter
 | Success | `done` | `completed` |
 | Knock | `knock` | `knock` |
 
-To add one: declare it in `HapticPlugin/src/package/events/DefaultEventSource.yaml`, map it in `events/extra/eventMapping.yaml`, and add it to `Events.Patterns` in `app/Models.cs`.
+To add one: declare it in `HapticGamingBridgePlugin/src/package/events/DefaultEventSource.yaml`, map it in `events/extra/eventMapping.yaml`, and add it to `Events.Patterns` in `app/Models.cs`.
 
 ## Limits and known issues
 
@@ -104,10 +104,10 @@ To add one: declare it in `HapticPlugin/src/package/events/DefaultEventSource.ya
 ## Packaging
 
 ```powershell
-cd HapticPlugin
+cd HapticGamingBridgePlugin
 dotnet build src -c Release
-logiplugintool pack .\bin\Release\ ..\dist\Haptic_1_0.lplug4
-logiplugintool verify ..\dist\Haptic_1_0.lplug4
+logiplugintool pack .\bin\Release\ ..\dist\HapticGamingBridge_1_0.lplug4
+logiplugintool verify ..\dist\HapticGamingBridge_1_0.lplug4
 ```
 
 Building in Release repoints the development link to `bin\Release`; run `dotnet build src` again to restore the Debug link.
@@ -125,7 +125,7 @@ un-testroom.ps1 -SkipLive  # without the tests that talk to the running plugin
 
 The test room runs:
 
-- **Unit tests** (`tests/HapticBridge.Tests`): input engine (cooldown, hold-to-repeat, modifiers, global switch, extreme values) and loading of `profiles.json`, which is treated as untrusted input: malformed or oversized files, unknown event names, out-of-range cooldowns, and executable paths pointing at network shares.
+- **Unit tests** (`tests/HapticGamingBridge.Tests`): input engine (cooldown, hold-to-repeat, modifiers, global switch, extreme values) and loading of `profiles.json`, which is treated as untrusted input: malformed or oversized files, unknown event names, out-of-range cooldowns, and executable paths pointing at network shares.
 - **Live security tests** against the plugin running in Logi Options+: malformed and oversized event names, binary garbage, an undeclared event name, a silent connection that must not block other clients, a burst of events, and the pipe's access list (current user only). They need Options+ running with the plugin loaded and close the desktop app first. They make the mouse buzz briefly.
 - **NuGet vulnerability scan** of all projects.
 - **Secret scan** of the files in the repository.
@@ -150,7 +150,7 @@ Only binaries built from this repository by the [release workflow](.github/workf
 
 ### Privacy policy
 
-This program does not transfer any information to other networked systems. It contains no network code. To work, it installs a global keyboard and mouse hook so it can see key presses and mouse buttons; it only compares them with the actions you configured, and does not record, store or send them. It reads the name and path of the program in the foreground to select a profile. The only thing it saves is your profiles, in `%APPDATA%\HapticBridge\profiles.json`. It talks to the Logi Options+ plugin over a local named pipe that only your Windows account can open. The Logi Options+ software and the haptic hardware have their own privacy policies.
+This program does not transfer any information to other networked systems. It contains no network code. To work, it installs a global keyboard and mouse hook so it can see key presses and mouse buttons; it only compares them with the actions you configured, and does not record, store or send them. It reads the name and path of the program in the foreground to select a profile. The only thing it saves is your profiles, in `%APPDATA%\HapticGamingBridge\profiles.json`. It talks to the Logi Options+ plugin over a local named pipe that only your Windows account can open. The Logi Options+ software and the haptic hardware have their own privacy policies.
 
 ## Building the installer
 
@@ -158,16 +158,16 @@ Requires [Inno Setup 6](https://jrsoftware.org/isinfo.php).
 
 ```powershell
 dotnet publish app -c Release -r win-x64 --self-contained true -o publish
-ISCC installer\HapticBridge.iss
+ISCC installer\HapticGamingBridge.iss
 ```
 
-The output is `dist\HapticBridge-Setup-1.0.0.exe`. The app is published self-contained, so users do not need to install .NET. The plugin package it bundles is `installer/plugin/Haptic_1_0.lplug4`; rebuild it after plugin changes (see [docs/code-signing.md](docs/code-signing.md)). The same build runs on GitHub Actions when you push a tag.
+The output is `dist\HapticGamingBridge-Setup-1.0.0.exe`. The app is published self-contained, so users do not need to install .NET. The plugin package it bundles is `installer/plugin/HapticGamingBridge_1_0.lplug4`; rebuild it after plugin changes (see [docs/code-signing.md](docs/code-signing.md)). The same build runs on GitHub Actions when you push a tag.
 
 ## Layout
 
 ```
 app/            WPF desktop app (profiles, input hooks, pipe client)
-HapticPlugin/   Logi plugin (pipe server, event declarations)
+HapticGamingBridgePlugin/   Logi plugin (pipe server, event declarations)
 client/         console tool that sends a test event
 installer/      Inno Setup script and the bundled plugin package
 docs/           maintainer notes and SignPath artifact configurations

@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace HapticBridge
+namespace HapticGamingBridge
 {
     // Dark replacement for MessageBox so prompts match the rest of the app.
     public partial class DialogWindow : Window

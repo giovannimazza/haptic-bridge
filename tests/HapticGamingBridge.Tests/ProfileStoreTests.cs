@@ -1,8 +1,8 @@
 using System.Text.Json;
-using HapticBridge;
+using HapticGamingBridge;
 using Xunit;
 
-namespace HapticBridge.Tests
+namespace HapticGamingBridge.Tests
 {
     // profiles.json is editable by the user (or by anything running as them), so loading it is a trust boundary.
     public class ProfileStoreTests : IDisposable
@@ -125,6 +125,19 @@ namespace HapticBridge.Tests
             foreach (var p in new[] { null, "", " ", "..\\..\\x.exe", "C:\\nonexistent\\x.exe", new string('a', 5000), "con", "NUL" })
                 Assert.Null(IconCache.Get(p));
             Assert.True(sw.ElapsedMilliseconds < 3000);
+        }
+
+        [Fact]
+        public void Migrate_copies_old_profiles_once_and_keeps_the_original()
+        {
+            var oldP = PathOf("old.json"); var newP = Path.Combine(_dir, "new", "profiles.json");
+            File.WriteAllText(oldP, "[]");
+            Assert.True(ProfileStore.Migrate(oldP, newP));
+            Assert.True(File.Exists(oldP));
+            File.WriteAllText(newP, "[{\"Name\":\"mine\"}]");
+            Assert.False(ProfileStore.Migrate(oldP, newP));                 // never overwrites
+            Assert.Contains("mine", File.ReadAllText(newP));
+            Assert.False(ProfileStore.Migrate(PathOf("missing.json"), PathOf("x.json")));
         }
 
         [Fact]

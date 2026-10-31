@@ -22,7 +22,7 @@ function Add-Result($name, $status, $detail) {
 }
 
 function Run-DotnetTest($name, $filter) {
-    $out = & dotnet test tests\HapticBridge.Tests --filter $filter --nologo 2>&1 | Out-String
+    $out = & dotnet test tests\HapticGamingBridge.Tests --filter $filter --nologo 2>&1 | Out-String
     $summary = ($out -split "`r?`n" | Where-Object { $_ -match 'Superati|Passed!|Failed!|Non superati' } | Select-Object -Last 1)
     if ($LASTEXITCODE -eq 0) { Add-Result $name 'PASS' $summary.Trim() }
     else {
@@ -41,9 +41,9 @@ Run-DotnetTest 'Unit tests: engine and profile loading' 'Category!=Live'
 # 2. Security tests against the real plugin.
 if ($SkipLive) { Add-Result 'Live plugin security tests' 'SKIP' 'skipped with -SkipLive' }
 else {
-    Get-Process HapticBridge -ErrorAction SilentlyContinue | Stop-Process -Force
+    Get-Process HapticGamingBridge -ErrorAction SilentlyContinue | Stop-Process -Force
     Start-Sleep -Milliseconds 500
-    $out = & dotnet test tests\HapticBridge.Tests --filter 'Category=Live' --nologo 2>&1 | Out-String
+    $out = & dotnet test tests\HapticGamingBridge.Tests --filter 'Category=Live' --nologo 2>&1 | Out-String
     $line = ($out -split "`r?`n" | Where-Object { $_ -match 'Superati|Passed!|Failed!|Non superati' } | Select-Object -Last 1)
     if ($out -match 'Ignorati:\s+[1-9]|Skipped:\s+[1-9]') { Add-Result 'Live plugin security tests' 'SKIP' 'plugin pipe not reachable: start Options+ with the plugin loaded' }
     elseif ($LASTEXITCODE -eq 0) { Add-Result 'Live plugin security tests' 'PASS' $line.Trim() }
@@ -55,7 +55,7 @@ else {
 
 # 3. Known vulnerabilities in NuGet dependencies (needs network).
 $vulnerable = @()
-foreach ($proj in 'app\app.csproj', 'client\client.csproj', 'tests\HapticBridge.Tests\HapticBridge.Tests.csproj', 'HapticPlugin\src\HapticPlugin.csproj') {
+foreach ($proj in 'app\app.csproj', 'client\client.csproj', 'tests\HapticGamingBridge.Tests\HapticGamingBridge.Tests.csproj', 'HapticGamingBridgePlugin\src\HapticGamingBridgePlugin.csproj') {
     $json = & dotnet list $proj package --vulnerable --include-transitive --format json 2>$null | Out-String
     try {
         $data = $json | ConvertFrom-Json
@@ -76,7 +76,7 @@ else { Add-Result 'Secret scan of tracked files' 'FAIL' ($hits -join "`n       "
 
 # 5. Shipped code must not reach the network or launch other programs.
 $risky = 'System\.Net\.(Http|Sockets|WebClient|WebSockets)|HttpClient|WebClient|WebRequest|TcpClient|UdpClient|Process\.Start\(|ProcessStartInfo|ShellExecute|cmd\.exe|powershell'
-$code = Source-Files @('app/*.cs', 'HapticPlugin/src/*.cs', 'HapticPlugin/src/**/*.cs')
+$code = Source-Files @('app/*.cs', 'HapticGamingBridgePlugin/src/*.cs', 'HapticGamingBridgePlugin/src/**/*.cs')
 $hits = $code | ForEach-Object { Select-String -Path $_ -Pattern $risky | ForEach-Object { "$($_.Path):$($_.LineNumber): $($_.Line.Trim())" } }
 if (-not $hits) { Add-Result 'No network or process-launch APIs in app and plugin' 'PASS' "$(@($code).Count) source files checked" }
 else { Add-Result 'No network or process-launch APIs in app and plugin' 'FAIL' ($hits -join "`n       ") }

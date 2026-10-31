@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace HapticBridge
+namespace HapticGamingBridge
 {
     // Dark title bar matching the app header; Windows 11 only for the custom colors, older builds just get the dark mode.
     public static class TitleBar

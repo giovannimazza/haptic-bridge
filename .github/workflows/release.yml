@@ -33,7 +33,7 @@ jobs:
           "VERSION=$v" >> $env:GITHUB_ENV
 
       - name: Unit tests
-        run: dotnet test tests/HapticBridge.Tests --filter "Category!=Live" --nologo
+        run: dotnet test tests/HapticGamingBridge.Tests --filter "Category!=Live" --nologo
 
       - name: Publish app
         run: dotnet publish app -c Release -r win-x64 --self-contained true -p:Version=${{ env.VERSION }} -o publish
@@ -46,8 +46,8 @@ jobs:
         with:
           name: unsigned-app
           path: |
-            publish/HapticBridge.exe
-            publish/HapticBridge.dll
+            publish/HapticGamingBridge.exe
+            publish/HapticGamingBridge.dll
 
       - name: Sign app files
         if: env.SIGN == 'true'
@@ -75,7 +75,7 @@ jobs:
 
       - name: Build installer
         shell: pwsh
-        run: '& "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" /DAppVersion=${{ env.VERSION }} installer\HapticBridge.iss'
+        run: '& "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" /DAppVersion=${{ env.VERSION }} installer\HapticGamingBridge.iss'
 
       - name: Upload unsigned installer
         if: env.SIGN == 'true'
@@ -83,7 +83,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: unsigned-installer
-          path: dist/HapticBridge-Setup-${{ env.VERSION }}.exe
+          path: dist/HapticGamingBridge-Setup-${{ env.VERSION }}.exe
 
       - name: Sign installer
         if: env.SIGN == 'true'
@@ -109,11 +109,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: installer-${{ env.VERSION }}
-          path: dist/HapticBridge-Setup-${{ env.VERSION }}.exe
+          path: dist/HapticGamingBridge-Setup-${{ env.VERSION }}.exe
 
       - name: Create release
         if: github.ref_type == 'tag'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create $env:GITHUB_REF_NAME "dist/HapticBridge-Setup-${{ env.VERSION }}.exe" installer/plugin/Haptic_1_0.lplug4 --title "Haptic Bridge ${{ env.VERSION }}" --generate-notes
+        run: gh release create $env:GITHUB_REF_NAME "dist/HapticGamingBridge-Setup-${{ env.VERSION }}.exe" installer/plugin/HapticGamingBridge_1_0.lplug4 --title "Haptic Gaming Bridge ${{ env.VERSION }}" --generate-notes

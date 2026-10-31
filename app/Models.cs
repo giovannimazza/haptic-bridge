@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using System.Windows.Media;
 
-namespace HapticBridge
+namespace HapticGamingBridge
 {
     public abstract class Notify : INotifyPropertyChanged
     {
@@ -47,7 +47,7 @@ namespace HapticBridge
     public record PatternInfo(string Id, string Label);
     public record ModifierInfo(string Id, string Label);
 
-    // Keep Patterns in sync with HapticPlugin/src/package/events/DefaultEventSource.yaml.
+    // Keep Patterns in sync with HapticGamingBridgePlugin/src/package/events/DefaultEventSource.yaml.
     public static class Events
     {
         public static readonly PatternInfo[] Patterns =

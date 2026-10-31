@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 
-namespace HapticBridge
+namespace HapticGamingBridge
 {
     // Reads and writes profiles.json. The file is user-editable, so everything read from it is treated as untrusted.
     public static class ProfileStore
@@ -14,6 +14,15 @@ namespace HapticBridge
         public const int MaxProfiles = 200, MaxRulesPerProfile = 500, MaxTextLength = 200;
 
         private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
+
+        // Earlier versions kept profiles in %APPDATA%\HapticBridge; copy them over once. The old file is left in place.
+        public static bool Migrate(string oldPath, string newPath)
+        {
+            if (!File.Exists(oldPath) || File.Exists(newPath)) return false;
+            Directory.CreateDirectory(Path.GetDirectoryName(newPath));
+            File.Copy(oldPath, newPath);
+            return true;
+        }
 
         // Throws on unreadable or malformed files; the caller decides what to tell the user.
         public static List<Profile> Load(string path)

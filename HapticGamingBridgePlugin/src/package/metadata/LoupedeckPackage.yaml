@@ -6,26 +6,26 @@
 type: plugin4
 
 # Name that identifies the plugin.
-name: Haptic
+name: HapticGamingBridge
 
 # Plugin name that is shown to the user.
-displayName: Haptic
+displayName: Haptic Gaming Bridge
 
 # Short description of the plugin.
-description: Haptic events driven by a companion desktop app
+description: Haptic feedback for games on the MX Master 4. Needs the free Haptic Gaming Bridge desktop app (download link on the support page), which sends your key and mouse presses to this plugin.
 
 # Name of the plugin library file.
 icon256x256: Icon256x256.png
-pluginFileName: HapticPlugin.dll
+pluginFileName: HapticGamingBridgePlugin.dll
 
 # Plugin version.
 version: 1.0
 
 # Author of the plugin. The author can be a company or an individual developer.
-author: Noogi
+author: giovannimazza
 
 # Copyright information.
-copyright: Copyright © 2026 Noogi. All rights reserved.
+copyright: Copyright © 2026 giovannimazza. Released under the MIT License.
 
 
 # ==================================================================================================
@@ -38,7 +38,6 @@ pluginFolderWin: bin
 
 # Location of plugin files on macOS (relative to the plugin base directory).
 # This parameter is required to support Mac.
-pluginFolderMac: bin
 
 # List of devices the plugin is optimized for.
 supportedDevices:
@@ -72,6 +71,8 @@ license: MIT
 
 # URL of the plugin license.
 licenseUrl: https://opensource.org/licenses/MIT
+supportPageUrl: https://github.com/giovannimazza/haptic-bridge/issues
+homePageUrl: https://github.com/giovannimazza/haptic-bridge
 
 # URL of the support page where the users can send improvement suggestions and report bugs.
 # The URL is shown in Loupedeck Marketplace. The page can be for example a GitHub issues page.

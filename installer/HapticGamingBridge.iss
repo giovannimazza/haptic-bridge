@@ -1,11 +1,11 @@
-; Build with: ISCC installer\HapticBridge.iss  (after `dotnet publish` into .\publish). The plugin package in installer\plugin is built locally
+; Build with: ISCC installer\HapticGamingBridge.iss  (after `dotnet publish` into .\publish). The plugin package in installer\plugin is built locally
 ; with the Logi Plugin Tool, because the plugin needs Logi's PluginApi.dll and cannot be built on CI.
-#define AppName "Haptic Bridge"
+#define AppName "Haptic Gaming Bridge"
 ; CI overrides the version with /DAppVersion=<tag>
 #ifndef AppVersion
   #define AppVersion "1.0.0"
 #endif
-#define PluginFile "Haptic_1_0.lplug4"
+#define PluginFile "HapticGamingBridge_1_0.lplug4"
 
 [Setup]
 AppId={{6E1266AA-120C-4A08-90C4-B432667A9CE4}
@@ -21,14 +21,14 @@ PrivilegesRequired=lowest
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 OutputDir=..\dist
-OutputBaseFilename=HapticBridge-Setup-{#AppVersion}
+OutputBaseFilename=HapticGamingBridge-Setup-{#AppVersion}
 VersionInfoVersion={#AppVersion}
 VersionInfoProductVersion={#AppVersion}
 VersionInfoProductName={#AppName}
 VersionInfoCompany=giovannimazza
 VersionInfoDescription={#AppName} Setup
 SetupIconFile=..\app\icon.ico
-UninstallDisplayIcon={app}\HapticBridge.exe
+UninstallDisplayIcon={app}\HapticGamingBridge.exe
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
@@ -43,10 +43,10 @@ Source: "..\publish\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 Source: "plugin\{#PluginFile}"; DestDir: "{app}\plugin"; Flags: ignoreversion
 
 [Icons]
-Name: "{autoprograms}\{#AppName}"; Filename: "{app}\HapticBridge.exe"
-Name: "{autodesktop}\{#AppName}"; Filename: "{app}\HapticBridge.exe"; Tasks: desktopicon
+Name: "{autoprograms}\{#AppName}"; Filename: "{app}\HapticGamingBridge.exe"
+Name: "{autodesktop}\{#AppName}"; Filename: "{app}\HapticGamingBridge.exe"; Tasks: desktopicon
 
 [Run]
 ; The Logi Plugin Service registers .lplug4, so opening the file starts its own install flow.
 Filename: "{app}\plugin\{#PluginFile}"; Tasks: installplugin; Flags: shellexec
-Filename: "{app}\HapticBridge.exe"; Description: "Launch {#AppName}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\HapticGamingBridge.exe"; Description: "Launch {#AppName}"; Flags: nowait postinstall skipifsilent

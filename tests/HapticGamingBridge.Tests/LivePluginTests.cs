@@ -5,16 +5,16 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Xunit;
 
-namespace HapticBridge.Tests
+namespace HapticGamingBridge.Tests
 {
     // These talk to the real plugin inside the Logi Plugin Service through its named pipe, so they need Options+ running
     // with the plugin loaded and the desktop app closed (the app holds a pipe connection). They skip themselves otherwise.
     // Each one sends a few short haptic events, so the mouse will buzz briefly.
     internal static class Live
     {
-        public const string PipeName = "HapticBridge";
+        public const string PipeName = "HapticGamingBridge";
         public static readonly string LogPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Logi", "LogiPluginService", "Logs", "plugin_logs", "Haptic.log");
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Logi", "LogiPluginService", "Logs", "plugin_logs", "HapticGamingBridge.log");
 
         public static NamedPipeClientStream Connect(int timeoutMs = 3000)
         {
