@@ -32,6 +32,13 @@ jobs:
           if ($env:GITHUB_REF_TYPE -eq 'tag') { $v = $env:GITHUB_REF_NAME.TrimStart('v') }
           "VERSION=$v" >> $env:GITHUB_ENV
 
+      - name: Check the tag matches the version in app.csproj
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        run: |
+          $declared = ([xml](Get-Content app/app.csproj)).Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1
+          if ($declared -ne $env:VERSION) { throw "Tag version $env:VERSION does not match <Version>$declared</Version> in app/app.csproj" }
+
       - name: Unit tests
         run: dotnet test tests/HapticGamingBridge.Tests --filter "Category!=Live" --nologo
 

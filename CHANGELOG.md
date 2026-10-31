@@ -1,8 +1,9 @@
 # Changelog
 
 All notable changes. Versions are the GitHub releases; the section at the top is not released yet.
+The version number is set in `app/app.csproj` and `installer/HapticGamingBridge.iss`; the release workflow refuses a tag that does not match it.
 
-## Unreleased
+## 1.1.0 (not released yet)
 
 - **Fire rate converter**: type a weapon's rounds per minute in the action editor and the cooldown is set for you, and the other way round. Quick buttons for 300, 600, 900 and 1200.
 - **More exact held fire**: shots are scheduled on a fixed grid and the repeat timer is finer, so the average rate matches the configured one. Before, an 80 ms cooldown fired about every 100 ms.

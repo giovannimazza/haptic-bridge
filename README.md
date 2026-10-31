@@ -48,7 +48,7 @@ The Actions SDK lets a plugin raise haptic events, but only from the plugin's ow
 
 ## Install
 
-Download `HapticGamingBridge-Setup-1.0.0.exe` from the [latest release](https://github.com/giovannimazza/haptic-bridge/releases/latest) and run it. It installs the desktop app for the current user (no administrator prompt) and, if you leave the task ticked, opens the Logi installer for the Options+ plugin. The plugin package is also attached to the release as `HapticGamingBridge_1_0.lplug4` if you prefer to install it by double-clicking.
+Download `HapticGamingBridge-Setup-<version>.exe` from the [latest release](https://github.com/giovannimazza/haptic-bridge/releases/latest) and run it. It installs the desktop app for the current user (no administrator prompt) and, if you leave the task ticked, opens the Logi installer for the Options+ plugin. The plugin package is also attached to the release as `HapticGamingBridge_1_0.lplug4` if you prefer to install it by double-clicking.
 
 The installer is not code-signed, so Windows SmartScreen may warn before running it.
 
@@ -208,7 +208,7 @@ dotnet publish app -c Release -r win-x64 --self-contained true -o publish
 ISCC installer\HapticGamingBridge.iss
 ```
 
-The output is `dist\HapticGamingBridge-Setup-1.0.0.exe`. The app is published self-contained, so users do not need to install .NET. The plugin package it bundles is `installer/plugin/HapticGamingBridge_1_0.lplug4`; rebuild it after plugin changes (see [docs/code-signing.md](docs/code-signing.md)). The same build runs on GitHub Actions when you push a tag.
+The output is `dist\HapticGamingBridge-Setup-1.1.0.exe` (the version comes from `app/app.csproj` and `installer/HapticGamingBridge.iss`; a test checks they agree). The app is published self-contained, so users do not need to install .NET. The plugin package it bundles is `installer/plugin/HapticGamingBridge_1_0.lplug4`; rebuild it after plugin changes (see [docs/code-signing.md](docs/code-signing.md)). The same build runs on GitHub Actions when you push a tag.
 
 ## Layout
 
