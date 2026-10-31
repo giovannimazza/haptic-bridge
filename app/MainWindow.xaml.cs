@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,6 +28,15 @@ namespace HapticGamingBridge
         private readonly DispatcherTimer _testTimer = new() { Interval = TimeSpan.FromMilliseconds(350) };
         private bool _capturing, _exiting, _syncing, _rpmEditing, _rpmSync;
         private int _runningTicks, _pluginTicks;
+
+        // ---- updates ----
+        private static readonly string SettingsPath =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HapticGamingBridge", "settings.json");
+        private readonly AppSettings _settings = SettingsStore.Load(SettingsPath);
+        private readonly UpdateService _updates = new();
+        private readonly bool _installedCopy = UpdateInstaller.IsInstalledCopy();
+        private ReleaseInfo _offered;
+        private bool _checking, _updating;
         private bool _pluginReady;
         private Rule _editing;          // rule being edited, null when adding
         private string _editInput;      // captured trigger for the editor
@@ -69,6 +79,11 @@ namespace HapticGamingBridge
             _tray.ContextMenuStrip = menu;
 
             Deactivated += (_, _) => Save();
+
+            // An installer or Windows asking the app to close (update, logoff) must not be answered by hiding to the tray.
+            Application.Current.SessionEnding += (_, _) => { _exiting = true; Save(); };
+
+            SetUpUpdates();
 
             var version = System.Diagnostics.FileVersionInfo.GetVersionInfo(Environment.ProcessPath).ProductVersion;
             VersionText.Text = "Haptic Gaming Bridge" + (string.IsNullOrEmpty(version) ? "" : " version " + version);
@@ -381,6 +396,157 @@ namespace HapticGamingBridge
         }
 
         private void Test_Lost(object sender, MouseEventArgs e) => _testTimer.Stop();
+
+        // ------------------------------------------------------------------ updates
+
+        private void SetUpUpdates()
+        {
+            AutoCheckBox.IsChecked = _settings.CheckForUpdates;
+            AutoInstallBox.IsChecked = _settings.InstallUpdatesAutomatically && _installedCopy;
+            ShowUpdateSettings();
+            UpdateInstaller.CleanOldDownloads(TimeSpan.FromHours(1));   // installers left by an update that did not finish
+
+            // Look a few seconds after start so the app is up first, then every few hours while it stays open.
+            var first = new DispatcherTimer { Interval = TimeSpan.FromSeconds(8) };
+            first.Tick += async (_, _) => { first.Stop(); await CheckForUpdatesAsync(manual: false, startup: true); };
+            first.Start();
+            var again = new DispatcherTimer { Interval = TimeSpan.FromHours(6) };
+            again.Tick += async (_, _) => await CheckForUpdatesAsync(manual: false, startup: false);
+            again.Start();
+        }
+
+        private void ShowUpdateSettings()
+        {
+            AutoInstallBox.IsEnabled = _installedCopy && _settings.CheckForUpdates;
+            AutoInstallNote.Text = _installedCopy ? "" : "Automatic installation only works for a copy installed with the installer; this copy was started from somewhere else, so an update opens the download page instead.";
+        }
+
+        private void SaveSettings()
+        {
+            try { SettingsStore.Save(SettingsPath, _settings); } catch { /* losing a preference must never break the app */ }
+        }
+
+        private void UpdateSettings_Click(object sender, RoutedEventArgs e)
+        {
+            _settings.CheckForUpdates = AutoCheckBox.IsChecked == true;
+            _settings.InstallUpdatesAutomatically = AutoInstallBox.IsChecked == true && _installedCopy && _settings.CheckForUpdates;
+            if (!_settings.CheckForUpdates) AutoInstallBox.IsChecked = false;
+            ShowUpdateSettings();
+            SaveSettings();
+        }
+
+        private async void CheckNow_Click(object sender, RoutedEventArgs e) => await CheckForUpdatesAsync(manual: true, startup: false);
+
+        private async Task CheckForUpdatesAsync(bool manual, bool startup)
+        {
+            if (_checking || _updating) return;
+            if (!manual)
+            {
+                if (!_settings.CheckForUpdates) return;
+                if (_settings.LastCheckUtc is DateTime last && DateTime.UtcNow - last < TimeSpan.FromMinutes(30)) return;   // restarting often does not mean asking often
+            }
+            _checking = true;
+            CheckNowBtn.IsEnabled = false;
+            UpdateStatus.Text = "Checking...";
+            try
+            {
+                var result = await _updates.CheckAsync();
+                if (result.Outcome != UpdateOutcome.Failed) { _settings.LastCheckUtc = DateTime.UtcNow; SaveSettings(); }
+                var when = DateTime.Now.ToString("HH:mm");
+                switch (result.Outcome)
+                {
+                    case UpdateOutcome.Available:
+                        _offered = result.Release;
+                        UpdateStatus.Text = $"Version {result.Release.Version} is available. You have {_updates.Current}. (Checked at {when}.)";
+                        var skipped = _settings.SkippedVersion == result.Release.Version.ToString();
+                        if (manual || !skipped) ShowUpdateBanner();
+                        if (startup && !manual && !skipped && _settings.InstallUpdatesAutomatically && _installedCopy && result.Release.CanInstall)
+                            await InstallUpdateAsync();
+                        break;
+                    case UpdateOutcome.UpToDate:
+                        UpdateStatus.Text = $"{result.Message} (Checked at {when}.)";
+                        break;
+                    default:
+                        UpdateStatus.Text = $"Could not check for updates: {result.Message}";
+                        break;
+                }
+            }
+            finally
+            {
+                _checking = false;
+                CheckNowBtn.IsEnabled = true;
+            }
+        }
+
+        private void ShowUpdateBanner()
+        {
+            var r = _offered;
+            if (r == null) return;
+            var installable = r.CanInstall && _installedCopy;
+            UpdateText.Text = $"Version {r.Version} is available";
+            UpdateDetail.Text = installable
+                ? $"You have {_updates.Current}. The update is downloaded, checked against the checksum GitHub published, and installed; the app restarts by itself."
+                : r.CanInstall
+                    ? $"You have {_updates.Current}. This copy was not installed with the installer, so the update opens the download page."
+                    : $"You have {_updates.Current}. This release has no published checksum, so the app cannot verify a download: open the release page.";
+            UpdateNowBtn.Content = installable ? "Update now" : "Open release page";
+            UpdateNowBtn.IsEnabled = true; UpdateNotesBtn.IsEnabled = true; UpdateSkipBtn.IsEnabled = true; UpdateCloseBtn.IsEnabled = true;
+            UpdateProgress.Visibility = Visibility.Collapsed;
+            UpdateBanner.Visibility = Visibility.Visible;
+        }
+
+        private async void UpdateNow_Click(object sender, RoutedEventArgs e) => await InstallUpdateAsync();
+
+        private void UpdateNotes_Click(object sender, RoutedEventArgs e)
+        {
+            if (_offered != null && !Links.Open(_offered.PageUrl)) DialogWindow.Info(this, "Could not open the link", "Your browser could not be started. The address is:\n" + _offered.PageUrl);
+        }
+
+        private void UpdateSkip_Click(object sender, RoutedEventArgs e)
+        {
+            if (_offered != null) { _settings.SkippedVersion = _offered.Version.ToString(); SaveSettings(); }
+            UpdateBanner.Visibility = Visibility.Collapsed;
+        }
+
+        private void UpdateClose_Click(object sender, RoutedEventArgs e) => UpdateBanner.Visibility = Visibility.Collapsed;
+
+        private async Task InstallUpdateAsync()
+        {
+            var release = _offered;
+            if (release == null || _updating) return;
+            if (!release.CanInstall || !_installedCopy)
+            {
+                if (!Links.Open(release.PageUrl)) DialogWindow.Info(this, "Could not open the link", "Your browser could not be started. The address is:\n" + release.PageUrl);
+                return;
+            }
+
+            _updating = true;
+            UpdateNowBtn.IsEnabled = false; UpdateNotesBtn.IsEnabled = false; UpdateSkipBtn.IsEnabled = false; UpdateCloseBtn.IsEnabled = false;
+            UpdateBanner.Visibility = Visibility.Visible;
+            UpdateText.Text = $"Downloading version {release.Version}";
+            UpdateDetail.Text = "0%";
+            UpdateProgress.Value = 0; UpdateProgress.Visibility = Visibility.Visible;
+            try
+            {
+                var progress = new Progress<double>(p => { UpdateProgress.Value = p * 100; UpdateDetail.Text = $"{(int)(p * 100)}%"; });
+                var installer = await _updates.DownloadAsync(release, progress);
+                UpdateText.Text = $"Installing version {release.Version}";
+                UpdateDetail.Text = "Checksum verified. The app closes now and reopens by itself when the update is done.";
+                Save();   // profiles and settings are on disk before the app closes
+                if (!UpdateInstaller.Launch(installer)) throw new UpdateException("The installer could not be started.");
+                _exiting = true;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                UpdateText.Text = "The update did not work";
+                UpdateDetail.Text = (ex is UpdateException ? ex.Message : "Something went wrong while updating.") + " Nothing was changed. You can try again or open the release page.";
+                UpdateProgress.Visibility = Visibility.Collapsed;
+                UpdateNowBtn.Content = "Try again";
+                UpdateNowBtn.IsEnabled = true; UpdateNotesBtn.IsEnabled = true; UpdateSkipBtn.IsEnabled = true; UpdateCloseBtn.IsEnabled = true;
+            }
+            finally { _updating = false; }
+        }
 
         // Closing the window hides it to the tray; "Exit" in the tray menu really quits.
         protected override void OnClosing(CancelEventArgs e)

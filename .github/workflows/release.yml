@@ -40,7 +40,7 @@ jobs:
           if ($declared -ne $env:VERSION) { throw "Tag version $env:VERSION does not match <Version>$declared</Version> in app/app.csproj" }
 
       - name: Unit tests
-        run: dotnet test tests/HapticGamingBridge.Tests --filter "Category!=Live" --nologo
+        run: dotnet test tests/HapticGamingBridge.Tests --filter "Category!=Live&Category!=Network" --nologo
 
       - name: Publish app
         run: dotnet publish app -c Release -r win-x64 --self-contained true -p:Version=${{ env.VERSION }} -o publish
@@ -112,6 +112,14 @@ jobs:
         shell: pwsh
         run: Copy-Item signed-installer\* dist\ -Force
 
+      - name: Checksums
+        shell: pwsh
+        run: |
+          # For people who want to check a download by hand; the in-app updater uses the digest GitHub publishes for each asset.
+          $files = Get-Item "dist/HapticGamingBridge-Setup-${{ env.VERSION }}.exe", "installer/plugin/HapticGamingBridge_1_0.lplug4"
+          $files | ForEach-Object { "{0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name } | Set-Content dist/SHA256SUMS.txt -Encoding ascii
+          Get-Content dist/SHA256SUMS.txt
+
       - name: Keep the build output
         uses: actions/upload-artifact@v4
         with:
@@ -123,4 +131,4 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create $env:GITHUB_REF_NAME "dist/HapticGamingBridge-Setup-${{ env.VERSION }}.exe" installer/plugin/HapticGamingBridge_1_0.lplug4 --title "Haptic Gaming Bridge ${{ env.VERSION }}" --generate-notes
+        run: gh release create $env:GITHUB_REF_NAME "dist/HapticGamingBridge-Setup-${{ env.VERSION }}.exe" installer/plugin/HapticGamingBridge_1_0.lplug4 dist/SHA256SUMS.txt --title "Haptic Gaming Bridge ${{ env.VERSION }}" --generate-notes

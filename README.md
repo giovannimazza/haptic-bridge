@@ -35,6 +35,7 @@ The Actions SDK lets a plugin raise haptic events, but only from the plugin's ow
 - Profiles per game, with icon, running indicator and a foreground marker; rename a profile with the pencil, a double-click on its name or F2
 - Actions with trigger (key or mouse button), haptic pattern, required modifier (Shift, Control, Alt, Left Mouse, Right Mouse), cooldown and hold-to-repeat
 - Rounds-per-minute converter: type a weapon's rate of fire and the cooldown is set for you ([details](docs/fire-rate.md))
+- Updates from GitHub releases: a banner offers a newer version and installs it after checking its checksum; it can be turned off completely ([details](docs/updates.md))
 - Global on/off switch and a per-profile switch to turn a game off without deleting it, test button for each pattern, tray icon, dark UI, an Info tab with a short guide
 - Profiles stored as JSON in `%APPDATA%\HapticGamingBridge\profiles.json`
 
@@ -113,6 +114,12 @@ cooldown (ms) = 60000 / rounds per minute
 
 The repeat timer is accurate to about 15 ms. Shots are scheduled on a fixed grid, so the average rate is exact even though single shots can be a few milliseconds early or late. Below 50 ms (above 1200 per minute) that jitter is a large part of the interval, so the editor marks the rate as approximate; the lowest cooldown it will set is 20 ms. The mouse itself may also merge pulses that arrive very close together. See [docs/fire-rate.md](docs/fire-rate.md) for the details.
 
+## Updates
+
+The app looks for a newer release on GitHub a few seconds after it starts and every six hours, and offers it in a banner. **Update now** downloads the installer, checks it, installs it and restarts the app; your profiles are kept. Under **Info > Updates** you can check by hand, turn the automatic check off (then the app makes no network connections at all), or let it install updates when it starts.
+
+An installer is only run if it comes from this project's release on GitHub, has the size and the SHA-256 checksum GitHub published, and, when signed, has a valid signature. Releases are **not code-signed yet**, so updating means trusting this repository. [docs/updates.md](docs/updates.md) has the full list of what is checked and what is not protected.
+
 ## Limits and known issues
 
 - **Timing.** The mouse merges or drops events that arrive too fast. In a raw test, events 600 ms apart all arrived, while at 400 ms only 3 of 5 did. Hold-to-repeat with a 75 ms cooldown felt natural by ear, but it is a perceptual choice, not a measured guarantee. The first event after a pause arrives slightly late. The repeat timer ticks every 50 ms, so that is the practical minimum.
@@ -176,7 +183,8 @@ The test room runs:
 - **Live security tests** against the plugin running in Logi Options+: malformed and oversized event names, binary garbage, an undeclared event name, a silent connection that must not block other clients, a burst of events, and the pipe's access list (current user only). They need Options+ running with the plugin loaded and close the desktop app first. They make the mouse buzz briefly.
 - **NuGet vulnerability scan** of all projects.
 - **Secret scan** of the files in the repository.
-- **Static check** that the app and plugin contain no network or process-launching APIs.
+- **Updater tests**: with a fake GitHub (what it accepts and refuses, redirects, checksums, sizes, signatures), on real signed and tampered files, and, read only, against the real GitHub (`-SkipNetwork` to leave those out).
+- **Static checks**: network code and process launching only in `app/Updates.cs` and `app/Links.cs`, no switched-off certificate checks, and every web address in the code on a short list of hosts.
 - **Repository hygiene**: no build output or oversized files.
 
 Exit code is 0 only when nothing failed.
@@ -197,7 +205,7 @@ Only binaries built from this repository by the [release workflow](.github/workf
 
 ### Privacy policy
 
-This program does not transfer any information to other networked systems. It contains no network code. To work, it installs a global keyboard and mouse hook so it can see key presses and mouse buttons; it only compares them with the actions you configured, and does not record, store or send them. It reads the name and path of the program in the foreground to select a profile. The only thing it saves is your profiles, in `%APPDATA%\HapticGamingBridge\profiles.json`. It talks to the Logi Options+ plugin over a local named pipe that only your Windows account can open. The Info tab has links to this repository and to a PayPal donation page; they open in your browser, and the app never contacts those sites itself. The Logi Options+ software and the haptic hardware have their own privacy policies.
+The only thing this program does on the network is look for updates: it asks GitHub (api.github.com) for the latest release of this project and, when you update, downloads the installer from GitHub. The request carries only the app name and version number, no profiles, no keys you press and no identifier; GitHub sees your IP address as any website does. You can switch this off under Info > Updates, and then the app makes no network connections at all. Apart from that, it does not transfer any information to other networked systems. To work, it installs a global keyboard and mouse hook so it can see key presses and mouse buttons; it only compares them with the actions you configured, and does not record, store or send them. It reads the name and path of the program in the foreground to select a profile. The only thing it saves is your profiles, in `%APPDATA%\HapticGamingBridge\profiles.json`. It talks to the Logi Options+ plugin over a local named pipe that only your Windows account can open. The Info tab has links to this repository and to a PayPal donation page; they open in your browser, and the app never contacts those sites itself. The Logi Options+ software and the haptic hardware have their own privacy policies.
 
 ## Building the installer
 

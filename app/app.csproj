@@ -11,7 +11,7 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <!-- Binary metadata. SignPath checks that product name and version are the same in every signed file. -->
     <Product>Haptic Gaming Bridge</Product>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Company>giovannimazza</Company>
     <Authors>giovannimazza</Authors>
     <Description>Haptic feedback for games on the Logitech MX Master 4</Description>

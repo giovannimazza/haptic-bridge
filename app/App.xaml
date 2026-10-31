@@ -284,6 +284,21 @@
             </Style.Triggers>
         </Style>
 
+        <!-- Thin progress bar for the update banner -->
+        <Style x:Key="ThinProgress" TargetType="ProgressBar">
+            <Setter Property="Height" Value="4" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Grid>
+                            <Border x:Name="PART_Track" Background="#2A3045" CornerRadius="2" />
+                            <Border x:Name="PART_Indicator" HorizontalAlignment="Left" Background="{StaticResource Accent}" CornerRadius="2" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Header tabs -->
         <Style x:Key="TabBtn" TargetType="RadioButton">
             <Setter Property="Foreground" Value="{StaticResource Muted}" />

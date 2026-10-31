@@ -3,7 +3,13 @@
 All notable changes. Versions are the GitHub releases; the section at the top is not released yet.
 The version number is set in `app/app.csproj` and `installer/HapticGamingBridge.iss`; the release workflow refuses a tag that does not match it.
 
-## 1.1.0 (not released yet)
+## 1.2.0 (not released yet)
+
+- **Automatic updates**: the app looks for a newer release on GitHub and offers it in a banner. *Update now* downloads the installer, checks its SHA-256 against the checksum GitHub published for that release file, and installs it; the app restarts by itself. *Skip this version* and *What's new* are there too. Under **Info > Updates** you can check by hand, turn the automatic check off (the app then makes no network connections at all), or let it install updates when it starts. See [docs/updates.md](docs/updates.md).
+- The privacy notes now say what the update check does on the network.
+- Release builds also publish a `SHA256SUMS.txt`.
+
+## 1.1.0
 
 - **Fire rate converter**: type a weapon's rounds per minute in the action editor and the cooldown is set for you, and the other way round. Quick buttons for 300, 600, 900 and 1200.
 - **More exact held fire**: shots are scheduled on a fixed grid and the repeat timer is finer, so the average rate matches the configured one. Before, an 80 ms cooldown fired about every 100 ms.

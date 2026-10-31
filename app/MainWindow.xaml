@@ -6,6 +6,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -32,8 +33,28 @@
             </DockPanel>
         </Border>
 
+
+        <!-- ============ Update banner ============ -->
+        <Border x:Name="UpdateBanner" Grid.Row="1" Grid.ColumnSpan="2" Visibility="Collapsed" Padding="24,10"
+                Background="{StaticResource Selected}" BorderBrush="{StaticResource Line}" BorderThickness="0,0,0,1">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                    <Button x:Name="UpdateNowBtn" Content="Update now" Style="{StaticResource BtnPrimary}" Padding="14,6" Click="UpdateNow_Click" />
+                    <Button x:Name="UpdateNotesBtn" Content="What's new" Style="{StaticResource Btn}" Padding="12,6" Margin="8,0,0,0" Click="UpdateNotes_Click" />
+                    <Button x:Name="UpdateSkipBtn" Content="Skip this version" Style="{StaticResource Btn}" Padding="12,6" Margin="8,0,0,0" Click="UpdateSkip_Click" />
+                    <Button x:Name="UpdateCloseBtn" Content="x" Style="{StaticResource BtnIcon}" Margin="8,0,0,0" ToolTip="Hide" Click="UpdateClose_Click" />
+                </StackPanel>
+                <TextBlock DockPanel.Dock="Left" Text="&#xE895;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{StaticResource Accent}" VerticalAlignment="Center" Margin="0,0,14,0" />
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock x:Name="UpdateText" Foreground="{StaticResource Text}" FontWeight="SemiBold" Text="An update is available" TextTrimming="CharacterEllipsis" />
+                    <ProgressBar x:Name="UpdateProgress" Style="{StaticResource ThinProgress}" Minimum="0" Maximum="100" Margin="0,6,0,2" Visibility="Collapsed" />
+                    <TextBlock x:Name="UpdateDetail" Foreground="{StaticResource Muted}" FontSize="12" TextWrapping="Wrap" Margin="0,2,0,0" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
         <!-- ============ Profile sidebar ============ -->
-        <Border Grid.Row="1" Background="{StaticResource Side}" BorderBrush="{StaticResource Line}" BorderThickness="0,0,1,0" Padding="16">
+        <Border Grid.Row="2" Background="{StaticResource Side}" BorderBrush="{StaticResource Line}" BorderThickness="0,0,1,0" Padding="16">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Text="GAME PROFILES" Foreground="{StaticResource Muted}" FontSize="11" FontWeight="SemiBold" Margin="4,4,0,12" />
                 <Button DockPanel.Dock="Bottom" Content="+ New profile" Style="{StaticResource BtnPrimary}" Padding="14,12" Click="AddProfile_Click" />
@@ -71,13 +92,13 @@
         </Border>
 
         <!-- ============ Empty state ============ -->
-        <StackPanel x:Name="EmptyState" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel x:Name="EmptyState" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Image Source="icon-large.png" Width="88" Height="88" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Center" />
             <TextBlock Text="Select a profile or create a new one" Foreground="{StaticResource Muted}" Margin="0,16,0,0" />
         </StackPanel>
 
         <!-- ============ Profile detail: cards + side editor ============ -->
-        <Grid x:Name="DetailView" Grid.Row="1" Grid.Column="1" Margin="24,20,24,16" Visibility="Collapsed">
+        <Grid x:Name="DetailView" Grid.Row="2" Grid.Column="1" Margin="24,20,24,16" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -233,7 +254,7 @@
         </Grid>
 
         <!-- ============ Info tab: covers the sidebar and the profile area while selected ============ -->
-        <ScrollViewer x:Name="InfoView" Grid.Row="1" Grid.ColumnSpan="2" Background="{StaticResource Bg}" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+        <ScrollViewer x:Name="InfoView" Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource Bg}" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
             <Border MaxWidth="760" Margin="30,28,30,0" HorizontalAlignment="Center">
                 <StackPanel>
                     <TextBlock Text="Haptic feedback for games on the MX Master 4" Foreground="{StaticResource Text}" FontSize="24" FontWeight="Bold" TextWrapping="Wrap" Margin="0,0,0,18" />
@@ -267,7 +288,19 @@
                     <Border Background="{StaticResource Card}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="22,18" Margin="0,0,0,16">
                         <StackPanel>
                             <TextBlock Text="Privacy" Foreground="{StaticResource Text}" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
-                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,0,0,0" Text="The app contains no network code and sends nothing anywhere. It listens to keyboard and mouse presses only to match the actions you set up: it does not record or store them. Your profiles are saved on this PC in %APPDATA%\HapticGamingBridge\profiles.json. The only connection to the plugin is a local one that only your Windows account can open. The links in this app open in your browser." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,0,0,0" Text="The only thing the app does on the network is look for updates. It asks GitHub for the latest release of this project (api.github.com) and, if you update, downloads the installer from GitHub, which sees your IP address as any website would. The request carries only the app name and version number: no profiles, no keys you press, no identifier. You can turn this off under Updates, and then the app makes no network connections at all. It listens to keyboard and mouse presses only to match the actions you set up: it does not record or store them. Your profiles and settings are saved on this PC in %APPDATA%\HapticGamingBridge. The only connection to the plugin is a local one that only your Windows account can open. The links in this app open in your browser." />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{StaticResource Card}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="22,18" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="Updates" Foreground="{StaticResource Text}" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
+                            <TextBlock x:Name="UpdateStatus" Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Text="Not checked yet." />
+                            <Button x:Name="CheckNowBtn" Content="Check for updates" Style="{StaticResource Btn}" HorizontalAlignment="Left" Margin="0,12,0,0" Click="CheckNow_Click" />
+                            <CheckBox x:Name="AutoCheckBox" Content="Check for updates automatically" Margin="0,16,0,0" Click="UpdateSettings_Click" />
+                            <CheckBox x:Name="AutoInstallBox" Content="Install updates automatically when the app starts" Margin="0,8,0,0" Click="UpdateSettings_Click" />
+                            <TextBlock x:Name="AutoInstallNote" Foreground="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" LineHeight="17" Margin="0,8,0,0" />
+                            <TextBlock Foreground="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" LineHeight="17" Margin="0,8,0,0"
+                                       Text="An update is only installed after its SHA-256 matches the checksum GitHub published for that release file. Releases are not code-signed yet, so Windows may show a warning." />
                         </StackPanel>
                     </Border>
                     <Border Background="{StaticResource Card}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="22,18" Margin="0,0,0,28">
