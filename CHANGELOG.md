@@ -1,13 +1,15 @@
 # Changelog
 
-All notable changes. Versions are the GitHub releases; the section at the top is not released yet.
+All notable changes. Versions are the GitHub releases. A section marked "not released yet" is work on `main` that has no release.
 The version number is set in `app/app.csproj` and `installer/HapticGamingBridge.iss`; the release workflow refuses a tag that does not match it.
 
-## 1.2.0 (not released yet)
+## 1.2.0
 
 - **Automatic updates**: the app looks for a newer release on GitHub and offers it in a banner. *Update now* downloads the installer, checks its SHA-256 against the checksum GitHub published for that release file, and installs it; the app restarts by itself. *Skip this version* and *What's new* are there too. Under **Info > Updates** you can check by hand, turn the automatic check off (the app then makes no network connections at all), or let it install updates when it starts. See [docs/updates.md](docs/updates.md).
 - The privacy notes now say what the update check does on the network.
-- Release builds also publish a `SHA256SUMS.txt`.
+- Release builds also publish a `SHA256SUMS.txt`, and the release workflow refuses a tag that does not match the version in `app/app.csproj`.
+- The app accepts a close request from an installer or Windows instead of hiding to the tray, so installing over a running copy no longer needs the app to be killed.
+- To update from 1.1.0 or older, install this version once by hand: those versions cannot update themselves. After that, updates arrive through the app. The Logi plugin is unchanged since 1.0.1.
 
 ## 1.1.0
 

@@ -53,6 +53,8 @@ Download `HapticGamingBridge-Setup-<version>.exe` from the [latest release](http
 
 The installer is not code-signed, so Windows SmartScreen may warn before running it.
 
+From version 1.2.0 the app can update itself: it offers newer releases in a banner and installs them after checking their checksum (see [Updates](#updates)). If you have 1.1.0 or older, install 1.2.0 once by hand first.
+
 ## Build and run
 
 Plugin (building also links it into the Logi Plugin Service and reloads it):
