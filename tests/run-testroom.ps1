@@ -74,11 +74,18 @@ $hits = Source-Files '*' | Where-Object { $_ -ne 'tests/run-testroom.ps1' -and $
 if (-not $hits) { Add-Result 'Secret scan of tracked files' 'PASS' 'nothing that looks like a credential' }
 else { Add-Result 'Secret scan of tracked files' 'FAIL' ($hits -join "`n       ") }
 
-# 5. Shipped code must not reach the network or launch other programs.
-$risky = 'System\.Net\.(Http|Sockets|WebClient|WebSockets)|HttpClient|WebClient|WebRequest|TcpClient|UdpClient|Process\.Start\(|ProcessStartInfo|ShellExecute|cmd\.exe|powershell'
+# 5. Shipped code must not reach the network or launch other programs. The one exception is app/Links.cs, which opens
+#    an allow-listed set of pages in the browser (the project's GitHub pages and the donation page); it is still checked
+#    for network APIs, and its allow-list is unit tested.
+$netApis = 'System\.Net\.(Http|Sockets|WebClient|WebSockets)|HttpClient|WebClient|WebRequest|TcpClient|UdpClient'
+$launchApis = 'Process\.Start\(|ProcessStartInfo|ShellExecute|cmd\.exe|powershell'
 $code = Source-Files @('app/*.cs', 'HapticGamingBridgePlugin/src/*.cs', 'HapticGamingBridgePlugin/src/**/*.cs')
-$hits = $code | ForEach-Object { Select-String -Path $_ -Pattern $risky | ForEach-Object { "$($_.Path):$($_.LineNumber): $($_.Line.Trim())" } }
-if (-not $hits) { Add-Result 'No network or process-launch APIs in app and plugin' 'PASS' "$(@($code).Count) source files checked" }
+$hits = $code | ForEach-Object {
+    $pattern = $netApis + '|' + $launchApis
+    if ($_ -eq 'app/Links.cs') { $pattern = $netApis }
+    Select-String -Path $_ -Pattern $pattern | ForEach-Object { "$($_.Path):$($_.LineNumber): $($_.Line.Trim())" }
+}
+if (-not $hits) { Add-Result 'No network or process-launch APIs in app and plugin' 'PASS' "$(@($code).Count) source files checked (browser links only via app/Links.cs)" }
 else { Add-Result 'No network or process-launch APIs in app and plugin' 'FAIL' ($hits -join "`n       ") }
 
 # 6. Repository hygiene: no build output or oversized files tracked.

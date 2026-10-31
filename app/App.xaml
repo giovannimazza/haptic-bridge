@@ -213,6 +213,144 @@
             </Setter>
         </Style>
 
+        <!-- Small switch for list rows -->
+        <Style x:Key="MiniSwitch" TargetType="CheckBox">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Border x:Name="Track" Width="34" Height="19" CornerRadius="9.5" Background="#3A3A3A">
+                            <Ellipse x:Name="Thumb" Width="13" Height="13" Fill="White" HorizontalAlignment="Left" Margin="3,0" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Track" Property="Background" Value="{StaticResource Accent}" />
+                                <Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Right" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Dark scrollbars -->
+        <Style x:Key="ScrollThumb" TargetType="Thumb">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Border x:Name="T" CornerRadius="4" Background="#363D52" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="T" Property="Background" Value="#4A5372" /></Trigger>
+                            <Trigger Property="IsDragging" Value="True"><Setter TargetName="T" Property="Background" Value="{StaticResource Accent}" /></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="12" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="Transparent">
+                            <Track x:Name="PART_Track" IsDirectionReversed="True">
+                                <Track.DecreaseRepeatButton><RepeatButton Style="{StaticResource FlatRepeat}" Command="ScrollBar.PageUpCommand" /></Track.DecreaseRepeatButton>
+                                <Track.Thumb><Thumb Style="{StaticResource ScrollThumb}" Margin="3,2" /></Track.Thumb>
+                                <Track.IncreaseRepeatButton><RepeatButton Style="{StaticResource FlatRepeat}" Command="ScrollBar.PageDownCommand" /></Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="Width" Value="Auto" />
+                    <Setter Property="Height" Value="12" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ScrollBar">
+                                <Grid Background="Transparent">
+                                    <Track x:Name="PART_Track" IsDirectionReversed="False">
+                                        <Track.DecreaseRepeatButton><RepeatButton Style="{StaticResource FlatRepeat}" Command="ScrollBar.PageLeftCommand" /></Track.DecreaseRepeatButton>
+                                        <Track.Thumb><Thumb Style="{StaticResource ScrollThumb}" Margin="2,3" /></Track.Thumb>
+                                        <Track.IncreaseRepeatButton><RepeatButton Style="{StaticResource FlatRepeat}" Command="ScrollBar.PageRightCommand" /></Track.IncreaseRepeatButton>
+                                    </Track>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Header tabs -->
+        <Style x:Key="TabBtn" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="{StaticResource Muted}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="B" Padding="14,7" CornerRadius="8" Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.Foreground="{TemplateBinding Foreground}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="B" Property="Background" Value="{StaticResource Hover}" /></Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="B" Property="Background" Value="{StaticResource Selected}" />
+                                <Setter Property="Foreground" Value="{StaticResource Text}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Donation button for the header: warm gradient, and the cup shakes like a rumbling controller on hover -->
+        <Style x:Key="CoffeeBtn" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="ToolTip" Value="Opens PayPal in your browser" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="B" CornerRadius="10" Padding="12,6" RenderTransformOrigin="0.5,0.5">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#FFD27A" Offset="0" />
+                                    <GradientStop Color="#FF9F43" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.RenderTransform><ScaleTransform x:Name="Grow" ScaleX="1" ScaleY="1" /></Border.RenderTransform>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#x2615;" FontFamily="Segoe UI Emoji" FontSize="16" Foreground="#2B1B00" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.85">
+                                    <TextBlock.RenderTransform><RotateTransform x:Name="Shake" Angle="0" /></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="Buy me a coffee" Foreground="#2B1B00" FontWeight="Bold" FontSize="13" Margin="7,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard x:Name="Wiggle">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="Shake" Storyboard.TargetProperty="Angle" From="-9" To="9"
+                                                             Duration="0:0:0.06" AutoReverse="True" RepeatBehavior="9x" FillBehavior="Stop" />
+                                            <DoubleAnimation Storyboard.TargetName="Grow" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.12" />
+                                            <DoubleAnimation Storyboard.TargetName="Grow" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.12" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="Wiggle" />
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Lightning bolt: green when the profile's process is running, grey otherwise -->
         <Style x:Key="RunIcon" TargetType="ContentControl">
             <Setter Property="ToolTip" Value="Not running" />

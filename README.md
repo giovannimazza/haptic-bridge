@@ -1,3 +1,7 @@
+<p align="center">
+  <a href="https://paypal.me/giovanbattistamazza"><img src="docs/assets/buy-me-a-coffee.svg" alt="Buy me a coffee" height="48"></a>
+</p>
+
 # Haptic Gaming Bridge
 
 Haptic feedback for mouse-and-keyboard games on the **Logitech MX Master 4**.
@@ -30,7 +34,7 @@ The Actions SDK lets a plugin raise haptic events, but only from the plugin's ow
 
 - Profiles per game, with icon, running indicator and a foreground marker
 - Actions with trigger (key or mouse button), haptic pattern, required modifier (Shift, Control, Alt, Left Mouse, Right Mouse), cooldown and hold-to-repeat
-- Global on/off switch, test button for each pattern, tray icon, dark UI
+- Global on/off switch and a per-profile switch to turn a game off without deleting it, test button for each pattern, tray icon, dark UI, an Info tab with a short guide
 - Profiles stored as JSON in `%APPDATA%\HapticGamingBridge\profiles.json`
 
 ## Requirements
@@ -174,7 +178,7 @@ Only binaries built from this repository by the [release workflow](.github/workf
 
 ### Privacy policy
 
-This program does not transfer any information to other networked systems. It contains no network code. To work, it installs a global keyboard and mouse hook so it can see key presses and mouse buttons; it only compares them with the actions you configured, and does not record, store or send them. It reads the name and path of the program in the foreground to select a profile. The only thing it saves is your profiles, in `%APPDATA%\HapticGamingBridge\profiles.json`. It talks to the Logi Options+ plugin over a local named pipe that only your Windows account can open. The Logi Options+ software and the haptic hardware have their own privacy policies.
+This program does not transfer any information to other networked systems. It contains no network code. To work, it installs a global keyboard and mouse hook so it can see key presses and mouse buttons; it only compares them with the actions you configured, and does not record, store or send them. It reads the name and path of the program in the foreground to select a profile. The only thing it saves is your profiles, in `%APPDATA%\HapticGamingBridge\profiles.json`. It talks to the Logi Options+ plugin over a local named pipe that only your Windows account can open. The Info tab has links to this repository and to a PayPal donation page; they open in your browser, and the app never contacts those sites itself. The Logi Options+ software and the haptic hardware have their own privacy policies.
 
 ## Building the installer
 

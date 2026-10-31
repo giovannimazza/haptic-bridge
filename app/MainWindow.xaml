@@ -9,21 +9,24 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="270" />
+            <ColumnDefinition Width="300" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <!-- ============ Top bar ============ -->
-        <Border Grid.ColumnSpan="2" Padding="24,12" Background="{StaticResource Side}" BorderBrush="{StaticResource Line}" BorderThickness="0,0,0,1">
+        <Border Grid.ColumnSpan="2" Padding="16,12,24,12" Background="{StaticResource Side}" BorderBrush="{StaticResource Line}" BorderThickness="0,0,0,1">
             <DockPanel>
-                <Border DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="8" Background="{StaticResource Accent}">
-                    <TextBlock Text="&#x26A1;" FontFamily="Segoe UI Symbol" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                </Border>
-                <TextBlock DockPanel.Dock="Left" Text="Haptic Gaming Bridge" Foreground="{StaticResource Text}" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0" />
+                <Image DockPanel.Dock="Left" Source="icon-header.png" Width="36" Height="36" Margin="-2,0,0,0" RenderOptions.BitmapScalingMode="HighQuality" VerticalAlignment="Center" />
+                <TextBlock DockPanel.Dock="Left" Text="Haptic Gaming Bridge" Foreground="{StaticResource Text}" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Margin="12,0,0,0" />
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="26,0,0,0">
+                    <RadioButton x:Name="TabProfiles" GroupName="Tabs" Content="Profiles" IsChecked="True" Style="{StaticResource TabBtn}" Checked="Tab_Checked" />
+                    <RadioButton x:Name="TabInfo" GroupName="Tabs" Content="Info" Style="{StaticResource TabBtn}" Margin="4,0,0,0" Checked="Tab_Checked" />
+                </StackPanel>
+                <Button DockPanel.Dock="Left" Style="{StaticResource CoffeeBtn}" Tag="https://paypal.me/giovanbattistamazza" Click="Link_Click" VerticalAlignment="Center" Margin="18,0,0,0" />
                 <Border x:Name="StatusPill" DockPanel.Dock="Right" CornerRadius="14" Padding="12,5" Background="{StaticResource Hover}" VerticalAlignment="Center" Margin="16,0,0,0">
                     <TextBlock x:Name="StatusText" Text="Plugin not found" Foreground="{StaticResource Text}" FontSize="12" FontWeight="SemiBold" />
                 </Border>
-                <CheckBox x:Name="EnabledSwitch" DockPanel.Dock="Right" Style="{StaticResource Switch}" IsChecked="True" Content="Haptics on"
+                <CheckBox x:Name="EnabledSwitch" DockPanel.Dock="Right" Style="{StaticResource Switch}" IsChecked="True" Content="Haptics on" Foreground="{StaticResource Text}"
                           VerticalAlignment="Center" Click="EnabledSwitch_Click" />
                 <Border />
             </DockPanel>
@@ -42,17 +45,23 @@
                                 <Button DockPanel.Dock="Right" Style="{StaticResource BtnIcon}" Background="Transparent" BorderBrush="Transparent" Foreground="{StaticResource Red}"
                                         FontFamily="Segoe MDL2 Assets" Content="&#xE74D;" FontSize="14" ToolTip="Delete profile" Padding="7,5" Margin="6,0,0,0"
                                         Click="DeleteProfileRow_Click" />
+                                <CheckBox DockPanel.Dock="Right" Style="{StaticResource MiniSwitch}" IsChecked="{Binding Enabled, Mode=TwoWay}" Margin="8,0,0,0" VerticalAlignment="Center"
+                                          ToolTip="Turn this profile on or off (keeps its actions)" />
                                 <Ellipse x:Name="Dot" DockPanel.Dock="Right" Width="8" Height="8" Fill="{StaticResource Green}" Visibility="Collapsed" VerticalAlignment="Center" ToolTip="In foreground" />
-                                <Border DockPanel.Dock="Left" Width="26" Height="26" CornerRadius="6" Background="{StaticResource Hover}" Margin="0,0,10,0">
+                                <Border x:Name="RowIcon" DockPanel.Dock="Left" Width="26" Height="26" CornerRadius="6" Background="{StaticResource Hover}" Margin="0,0,10,0">
                                     <Image Source="{Binding Icon}" Margin="3" />
                                 </Border>
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding Name}" Foreground="{StaticResource Text}" FontWeight="SemiBold" MaxWidth="100" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                <StackPanel x:Name="RowName" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Name}" Foreground="{StaticResource Text}" FontWeight="SemiBold" MaxWidth="84" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
                                     <ContentControl Style="{StaticResource RunIcon}" FontSize="14" Margin="8,0,0,0" />
                                 </StackPanel>
                             </DockPanel>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding IsActive}" Value="True"><Setter TargetName="Dot" Property="Visibility" Value="Visible" /></DataTrigger>
+                                <DataTrigger Binding="{Binding Enabled}" Value="False">
+                                    <Setter TargetName="RowIcon" Property="Opacity" Value="0.4" />
+                                    <Setter TargetName="RowName" Property="Opacity" Value="0.4" />
+                                </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -62,9 +71,7 @@
 
         <!-- ============ Empty state ============ -->
         <StackPanel x:Name="EmptyState" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Border Width="72" Height="72" CornerRadius="36" Background="{StaticResource Card}" HorizontalAlignment="Center">
-                <TextBlock Text="&#x26A1;" FontFamily="Segoe UI Symbol" Foreground="{StaticResource Accent}" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Border>
+            <Image Source="icon-large.png" Width="88" Height="88" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Center" />
             <TextBlock Text="Select a profile or create a new one" Foreground="{StaticResource Muted}" Margin="0,16,0,0" />
         </StackPanel>
 
@@ -91,6 +98,17 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding Name}" Foreground="{StaticResource Text}" FontSize="22" FontWeight="Bold" MaxWidth="320" TextTrimming="CharacterEllipsis" />
                                 <ContentControl Style="{StaticResource RunIcon}" FontSize="18" Margin="10,3,0,0" />
+                                <Border CornerRadius="10" Padding="9,3" Margin="12,4,0,0" Background="{StaticResource Hover}" VerticalAlignment="Center">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Enabled}" Value="False"><Setter Property="Visibility" Value="Visible" /></DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock Text="Disabled" Foreground="{StaticResource Muted}" FontSize="11" FontWeight="SemiBold" />
+                                </Border>
                             </StackPanel>
                             <TextBlock Text="{Binding Exe}" Foreground="{StaticResource Muted}" FontSize="11" Margin="0,3,0,0" TextTrimming="CharacterEllipsis" />
                         </StackPanel>
@@ -191,5 +209,58 @@
                 </StackPanel>
             </Border>
         </Grid>
+
+        <!-- ============ Info tab: covers the sidebar and the profile area while selected ============ -->
+        <ScrollViewer x:Name="InfoView" Grid.Row="1" Grid.ColumnSpan="2" Background="{StaticResource Bg}" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+            <Border MaxWidth="760" Margin="30,28,30,0" HorizontalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Text="Haptic feedback for games on the MX Master 4" Foreground="{StaticResource Text}" FontSize="24" FontWeight="Bold" TextWrapping="Wrap" Margin="0,0,0,18" />
+                    <Border Background="{StaticResource Card}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="22,18" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="What it does" Foreground="{StaticResource Text}" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,0,0,0" Text="Haptic Gaming Bridge makes your Logitech MX Master 4 vibrate when you press the keys and mouse buttons you choose while playing, a bit like the rumble of a game controller. It watches your input, picks the profile of the game that is in the foreground, and asks the Logi Options+ plugin to play a vibration." />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{StaticResource Card}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="22,18" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="Getting started" Foreground="{StaticResource Text}" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,0,0,0" Text="1.  Install the Logi Options+ plugin (the installer offers it) and keep Logi Options+ running." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="2.  Press  + New profile  and pick your game from the running programs, or browse to its .exe." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="3.  Press  + Add action : choose a key or mouse button, a haptic pattern, an optional modifier, a cooldown and whether to repeat while held. Use Test to feel the pattern." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="4.  Play. The green dot next to a profile shows which one is active right now; only the game in the foreground triggers vibrations." />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{StaticResource Card}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="22,18" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="Good to know" Foreground="{StaticResource Text}" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,0,0,0" Text="The pill at the top shows whether the plugin is running. Orange (Plugin not found) means nothing will vibrate until Logi Options+ and the plugin are running." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="The switch at the top turns all haptics on or off. The small switch next to a profile turns just that profile off, without deleting its actions." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="Cooldown is the minimum time between two pulses. The mouse merges or drops pulses that arrive too close together, so a very short cooldown does not feel faster. With Hold, around 75 to 350 ms feels natural for shooting and around 160 ms for footsteps." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="Each trigger is a short pulse. The mouse cannot hold a continuous vibration." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="If a game runs as administrator, run Haptic Gaming Bridge as administrator too, otherwise Windows hides the game's input from it." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="Not tested with anti-cheat software." />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{StaticResource Card}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="22,18" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="Privacy" Foreground="{StaticResource Text}" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,0,0,0" Text="The app contains no network code and sends nothing anywhere. It listens to keyboard and mouse presses only to match the actions you set up: it does not record or store them. Your profiles are saved on this PC in %APPDATA%\HapticGamingBridge\profiles.json. The only connection to the plugin is a local one that only your Windows account can open. The links in this app open in your browser." />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{StaticResource Card}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="22,18" Margin="0,0,0,28">
+                        <StackPanel>
+                            <TextBlock Text="About" Foreground="{StaticResource Text}" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
+                            <TextBlock x:Name="VersionText" Foreground="{StaticResource Text}" Text="Haptic Gaming Bridge" />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="Free and open source under the MIT license. Independent project, not affiliated with or endorsed by Logitech. Source code, releases and bug reports are on GitHub." />
+                            <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                                <Button Content="Open on GitHub" Style="{StaticResource BtnPrimary}" Tag="https://github.com/giovannimazza/haptic-bridge" Click="Link_Click" />
+                                <Button Content="Report an issue" Style="{StaticResource Btn}" Margin="8,0,0,0" Tag="https://github.com/giovannimazza/haptic-bridge/issues" Click="Link_Click" />
+                                <Button Content="Releases" Style="{StaticResource Btn}" Margin="8,0,0,0" Tag="https://github.com/giovannimazza/haptic-bridge/releases" Click="Link_Click" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
     </Grid>
 </Window>

@@ -141,6 +141,19 @@ namespace HapticGamingBridge.Tests
         }
 
         [Fact]
+        public void Disabled_flag_survives_save_and_load_and_old_files_stay_enabled()
+        {
+            var off = P("a.exe"); off.Enabled = false;
+            ProfileStore.Save(PathOf(), new[] { off, P("b.exe") });
+            var back = ProfileStore.Load(PathOf());
+            Assert.False(back[0].Enabled);
+            Assert.True(back[1].Enabled);
+
+            File.WriteAllText(PathOf("old.json"), "[{\"Name\":\"old\",\"Exe\":\"g.exe\",\"Rules\":[]}]");   // written before the flag existed
+            Assert.True(Assert.Single(ProfileStore.Load(PathOf("old.json"))).Enabled);
+        }
+
+        [Fact]
         public void Failed_save_does_not_destroy_the_existing_file()
         {
             ProfileStore.Save(PathOf(), new[] { P("a.exe") });

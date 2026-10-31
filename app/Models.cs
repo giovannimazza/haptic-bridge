@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
@@ -29,7 +31,7 @@ namespace HapticGamingBridge
     public class Profile : Notify
     {
         private string _name = "New profile", _exe = "";
-        private bool _active, _running;
+        private bool _active, _running, _enabled = true;
 
         public string Name { get => _name; set { _name = value; Raise(); } }
 
@@ -38,10 +40,25 @@ namespace HapticGamingBridge
 
         public ObservableCollection<Rule> Rules { get; set; } = new();
 
+        // A disabled profile is kept but never triggers anything. Files from older versions have no value: they stay enabled.
+        public bool Enabled { get => _enabled; set { if (_enabled != value) { _enabled = value; Raise(); } } }
+
         [JsonIgnore] public bool IsActive { get => _active; set { if (_active != value) { _active = value; Raise(); } } }
         [JsonIgnore] public bool IsRunning { get => _running; set { if (_running != value) { _running = value; Raise(); } } }
         [JsonIgnore] public ImageSource Icon => IconCache.Get(Exe);
         public override string ToString() => Name;
+    }
+
+    public static class ProfileMatcher
+    {
+        // The profile that should react to the program in the foreground, or null. Matching is by file name so versioned
+        // install folders keep working, and disabled profiles are skipped.
+        public static Profile Find(IEnumerable<Profile> profiles, string foregroundPath)
+        {
+            var name = Path.GetFileName(foregroundPath ?? "");
+            if (name == "") return null;
+            return profiles.FirstOrDefault(p => p.Enabled && string.Equals(Path.GetFileName(p.Exe ?? ""), name, StringComparison.OrdinalIgnoreCase));
+        }
     }
 
     public record PatternInfo(string Id, string Label);

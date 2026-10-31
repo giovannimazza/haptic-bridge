@@ -20,5 +20,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
+    <Resource Include="icon-header.png" />
+    <Resource Include="icon-large.png" />
   </ItemGroup>
 </Project>

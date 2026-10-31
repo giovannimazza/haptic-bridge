@@ -43,6 +43,8 @@ namespace HapticGamingBridge
 
             Load();
             ProfileList.ItemsSource = _profiles;
+            foreach (var existing in _profiles) WatchEnabled(existing);
+            _profiles.CollectionChanged += (_, e) => { if (e.NewItems != null) foreach (Profile added in e.NewItems) WatchEnabled(added); };
 
             _engine = new Engine(() => _clock.ElapsedMilliseconds, _sender.Send, InputHook.ModifierHeld);
             _hook = new InputHook();
@@ -67,6 +69,9 @@ namespace HapticGamingBridge
             _tray.ContextMenuStrip = menu;
 
             Deactivated += (_, _) => Save();
+
+            var version = System.Diagnostics.FileVersionInfo.GetVersionInfo(Environment.ProcessPath).ProductVersion;
+            VersionText.Text = "Haptic Gaming Bridge" + (string.IsNullOrEmpty(version) ? "" : " version " + version);
         }
 
         // ---------------------------------------------------------------- runtime
@@ -89,8 +94,7 @@ namespace HapticGamingBridge
         {
             var fgPath = InputHook.ForegroundExe();
             var fg = Path.GetFileName(fgPath);
-            // Match by file name so versioned install folders (app-1.0.9266) keep working.
-            var active = fg == "" ? null : _profiles.FirstOrDefault(p => string.Equals(Path.GetFileName(p.Exe), fg, StringComparison.OrdinalIgnoreCase));
+            var active = ProfileMatcher.Find(_profiles, fgPath);
             // Profiles saved with only a file name, or whose folder changed, pick up the real path (and icon) here.
             if (active != null && !File.Exists(active.Exe)) { active.Exe = fgPath; Save(); }
             _engine.Active = active;
@@ -113,7 +117,28 @@ namespace HapticGamingBridge
             StatusText.Foreground = _pluginReady ? (Brush)FindResource("Text") : Brushes.Black;   // dark text stays readable on orange
         }
 
-        private void EnabledSwitch_Click(object sender, RoutedEventArgs e) => _engine.Enabled = EnabledSwitch.IsChecked == true;
+        private void Tab_Checked(object sender, RoutedEventArgs e)
+        {
+            if (InfoView == null) return;   // fires once while the XAML is still loading
+            InfoView.Visibility = TabInfo.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void Link_Click(object sender, RoutedEventArgs e)
+        {
+            var url = (string)((FrameworkElement)sender).Tag;
+            if (!Links.Open(url)) DialogWindow.Info(this, "Could not open the link", "Your browser could not be started. The address is:\n" + url);
+        }
+
+        // The switch writes the flag through its binding; saving here also covers keyboard and accessibility toggles.
+        private void WatchEnabled(Profile p) => p.PropertyChanged += (_, e) => { if (e.PropertyName == nameof(Profile.Enabled)) Save(); };
+
+        private void EnabledSwitch_Click(object sender, RoutedEventArgs e)
+        {
+            var on = EnabledSwitch.IsChecked == true;
+            _engine.Enabled = on;
+            EnabledSwitch.Content = on ? "Haptics on" : "Haptics off";
+            EnabledSwitch.Foreground = on ? (Brush)FindResource("Text") : (Brush)FindResource("Muted");
+        }
 
         // ---------------------------------------------------------------- storage
 
