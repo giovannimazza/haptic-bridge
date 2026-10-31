@@ -115,17 +115,14 @@ namespace HapticBridge
         {
             try
             {
-                if (File.Exists(ProfilesPath))
-                    foreach (var p in JsonSerializer.Deserialize<Profile[]>(File.ReadAllText(ProfilesPath)) ?? Array.Empty<Profile>())
-                        _profiles.Add(p);
+                foreach (var p in ProfileStore.Load(ProfilesPath)) _profiles.Add(p);
             }
             catch (Exception ex) { DialogWindow.Info(null, "Profiles not readable", "Profiles could not be read, starting empty: " + ex.Message); }
         }
 
         private void Save()
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(ProfilesPath));
-            File.WriteAllText(ProfilesPath, JsonSerializer.Serialize(_profiles, new JsonSerializerOptions { WriteIndented = true }));
+            ProfileStore.Save(ProfilesPath, _profiles);
         }
 
         // ---------------------------------------------------------------- profiles

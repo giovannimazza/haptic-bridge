@@ -97,7 +97,7 @@ To add one: declare it in `HapticPlugin/src/package/events/DefaultEventSource.ya
 - **Fast weapons.** Automatic fire cannot be reproduced shot by shot; use hold-to-repeat with a cooldown.
 - **Elevated games.** Windows does not deliver input to a normal process's hooks while an administrator-level window has focus. Run the app as administrator for games started that way.
 - **Anti-cheat.** The app uses global input hooks. Anti-cheat software may object to that. Not tested.
-- **Pipe security.** The pipe accepts one client and has no access control; any local process can make the mouse vibrate. Restrict it to the current user before distributing.
+- **Pipe security.** Only the current Windows user can open the pipe, event names are limited to 64 identifier characters, and up to 4 clients can connect at once. Any program running as you can still make the mouse vibrate.
 - **Plugin needs the app.** The plugin alone does nothing.
 - **Windows only.** There is no macOS version.
 
@@ -113,6 +113,24 @@ logiplugintool verify ..\dist\Haptic_1_0.lplug4
 Building in Release repoints the development link to `bin\Release`; run `dotnet build src` again to restore the Debug link.
 
 Before submitting to the Logi Marketplace, the package metadata still needs real values (display name, description, author, support and home page URLs). The Marketplace guidelines require your own EULA, MIT or Apache-2.0 for open source dependencies, and manual approval of each submission. They do not say whether a plugin that depends on a companion app is allowed; ask marketplace@logitech.com.
+
+## Tests
+
+```powershell
+.	estsun-testroom.ps1            # everything
+.	estsun-testroom.ps1 -SkipLive  # without the tests that talk to the running plugin
+```
+
+The test room runs:
+
+- **Unit tests** (`tests/HapticBridge.Tests`): input engine (cooldown, hold-to-repeat, modifiers, global switch, extreme values) and loading of `profiles.json`, which is treated as untrusted input: malformed or oversized files, unknown event names, out-of-range cooldowns, and executable paths pointing at network shares.
+- **Live security tests** against the plugin running in Logi Options+: malformed and oversized event names, binary garbage, an undeclared event name, a silent connection that must not block other clients, a burst of events, and the pipe's access list (current user only). They need Options+ running with the plugin loaded and close the desktop app first. They make the mouse buzz briefly.
+- **NuGet vulnerability scan** of all projects.
+- **Secret scan** of the files in the repository.
+- **Static check** that the app and plugin contain no network or process-launching APIs.
+- **Repository hygiene**: no build output or oversized files.
+
+Exit code is 0 only when nothing failed.
 
 ## Building the installer
 
@@ -133,6 +151,7 @@ app/            WPF desktop app (profiles, input hooks, pipe client)
 HapticPlugin/   Logi plugin (pipe server, event declarations)
 client/         console tool that sends a test event
 installer/      Inno Setup script
+tests/          unit and security tests, and run-testroom.ps1
 ```
 
 ## License
