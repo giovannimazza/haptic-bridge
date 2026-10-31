@@ -9,3 +9,6 @@ loadtest/
 # IDE and user files
 .vs/
 *.user
+
+# Local publish output
+publish/

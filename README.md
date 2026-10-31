@@ -41,6 +41,12 @@ The Actions SDK lets a plugin raise haptic events, but only from the plugin's ow
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (the installed `PluginApi.dll` targets .NET 10)
 - Logi Plugin Tool: `dotnet tool install --global LogiPluginTool --version 6.1.4.22672` (version 6.4.2 failed to install on the SDK used here)
 
+## Install
+
+Download `HapticBridge-Setup-1.0.0.exe` from the [latest release](https://github.com/giovannimazza/haptic-bridge/releases/latest) and run it. It installs the desktop app for the current user (no administrator prompt) and, if you leave the task ticked, opens the Logi installer for the Options+ plugin. The plugin package is also attached to the release as `Haptic_1_0.lplug4` if you prefer to install it by double-clicking.
+
+The installer is not code-signed, so Windows SmartScreen may warn before running it.
+
 ## Build and run
 
 Plugin (building also links it into the Logi Plugin Service and reloads it):
@@ -108,12 +114,25 @@ Building in Release repoints the development link to `bin\Release`; run `dotnet 
 
 Before submitting to the Logi Marketplace, the package metadata still needs real values (display name, description, author, support and home page URLs). The Marketplace guidelines require your own EULA, MIT or Apache-2.0 for open source dependencies, and manual approval of each submission. They do not say whether a plugin that depends on a companion app is allowed; ask marketplace@logitech.com.
 
+## Building the installer
+
+Requires [Inno Setup 6](https://jrsoftware.org/isinfo.php).
+
+```powershell
+dotnet publish app -c Release -r win-x64 --self-contained true -o publish
+# pack the plugin into dist\Haptic_1_0.lplug4 (see Packaging), then:
+ISCC installer\HapticBridge.iss
+```
+
+The output is `dist\HapticBridge-Setup-1.0.0.exe`. The app is published self-contained, so users do not need to install .NET.
+
 ## Layout
 
 ```
 app/            WPF desktop app (profiles, input hooks, pipe client)
 HapticPlugin/   Logi plugin (pipe server, event declarations)
 client/         console tool that sends a test event
+installer/      Inno Setup script
 ```
 
 ## License
