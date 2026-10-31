@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SignPath artifact configuration "app": the zip holds only our own two binaries. The Microsoft runtime files in the
+     publish folder are already signed by Microsoft and are not part of it. -->
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <parameters>
+    <parameter name="version" />
+  </parameters>
+  <zip-file>
+    <pe-file path="HapticBridge.exe" product-name="Haptic Bridge" product-version="${version}">
+      <authenticode-sign/>
+    </pe-file>
+    <pe-file path="HapticBridge.dll" product-name="Haptic Bridge" product-version="${version}">
+      <authenticode-sign/>
+    </pe-file>
+  </zip-file>
+</artifact-configuration>

@@ -117,8 +117,10 @@ Before submitting to the Logi Marketplace, the package metadata still needs real
 ## Tests
 
 ```powershell
-.	estsun-testroom.ps1            # everything
-.	estsun-testroom.ps1 -SkipLive  # without the tests that talk to the running plugin
+.	ests
+un-testroom.ps1            # everything
+.	ests
+un-testroom.ps1 -SkipLive  # without the tests that talk to the running plugin
 ```
 
 The test room runs:
@@ -132,17 +134,34 @@ The test room runs:
 
 Exit code is 0 only when nothing failed.
 
+## Code signing policy
+
+**Status: not signed yet.** The application to SignPath Foundation is still to be submitted, so current releases are unsigned and Windows SmartScreen may warn. Once the project is accepted, the policy below applies to every signed release.
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
+Only binaries built from this repository by the [release workflow](.github/workflows/release.yml) are signed, and each signing request needs manual approval. Setup notes for maintainers are in [docs/code-signing.md](docs/code-signing.md).
+
+| Role | Member |
+|---|---|
+| Authors | [giovannimazza](https://github.com/giovannimazza) |
+| Reviewers | [giovannimazza](https://github.com/giovannimazza) |
+| Approvers | [giovannimazza](https://github.com/giovannimazza) |
+
+### Privacy policy
+
+This program does not transfer any information to other networked systems. It contains no network code. To work, it installs a global keyboard and mouse hook so it can see key presses and mouse buttons; it only compares them with the actions you configured, and does not record, store or send them. It reads the name and path of the program in the foreground to select a profile. The only thing it saves is your profiles, in `%APPDATA%\HapticBridge\profiles.json`. It talks to the Logi Options+ plugin over a local named pipe that only your Windows account can open. The Logi Options+ software and the haptic hardware have their own privacy policies.
+
 ## Building the installer
 
 Requires [Inno Setup 6](https://jrsoftware.org/isinfo.php).
 
 ```powershell
 dotnet publish app -c Release -r win-x64 --self-contained true -o publish
-# pack the plugin into dist\Haptic_1_0.lplug4 (see Packaging), then:
 ISCC installer\HapticBridge.iss
 ```
 
-The output is `dist\HapticBridge-Setup-1.0.0.exe`. The app is published self-contained, so users do not need to install .NET.
+The output is `dist\HapticBridge-Setup-1.0.0.exe`. The app is published self-contained, so users do not need to install .NET. The plugin package it bundles is `installer/plugin/Haptic_1_0.lplug4`; rebuild it after plugin changes (see [docs/code-signing.md](docs/code-signing.md)). The same build runs on GitHub Actions when you push a tag.
 
 ## Layout
 
@@ -150,10 +169,12 @@ The output is `dist\HapticBridge-Setup-1.0.0.exe`. The app is published self-con
 app/            WPF desktop app (profiles, input hooks, pipe client)
 HapticPlugin/   Logi plugin (pipe server, event declarations)
 client/         console tool that sends a test event
-installer/      Inno Setup script
+installer/      Inno Setup script and the bundled plugin package
+docs/           maintainer notes and SignPath artifact configurations
+.github/        release workflow
 tests/          unit and security tests, and run-testroom.ps1
 ```
 
 ## License
 
-No license file has been added yet. The plugin's package metadata declares MIT.
+[MIT](LICENSE).

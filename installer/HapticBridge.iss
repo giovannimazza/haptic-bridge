@@ -1,6 +1,10 @@
-; Build with: ISCC installer\HapticBridge.iss  (after `dotnet publish` into .\publish and packing the plugin into .\dist)
+; Build with: ISCC installer\HapticBridge.iss  (after `dotnet publish` into .\publish). The plugin package in installer\plugin is built locally
+; with the Logi Plugin Tool, because the plugin needs Logi's PluginApi.dll and cannot be built on CI.
 #define AppName "Haptic Bridge"
-#define AppVersion "1.0.0"
+; CI overrides the version with /DAppVersion=<tag>
+#ifndef AppVersion
+  #define AppVersion "1.0.0"
+#endif
 #define PluginFile "Haptic_1_0.lplug4"
 
 [Setup]
@@ -18,6 +22,11 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 OutputDir=..\dist
 OutputBaseFilename=HapticBridge-Setup-{#AppVersion}
+VersionInfoVersion={#AppVersion}
+VersionInfoProductVersion={#AppVersion}
+VersionInfoProductName={#AppName}
+VersionInfoCompany=giovannimazza
+VersionInfoDescription={#AppName} Setup
 SetupIconFile=..\app\icon.ico
 UninstallDisplayIcon={app}\HapticBridge.exe
 Compression=lzma2
@@ -31,7 +40,7 @@ Name: "desktopicon"; Description: "Create a desktop shortcut"; Flags: unchecked
 
 [Files]
 Source: "..\publish\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
-Source: "..\dist\{#PluginFile}"; DestDir: "{app}\plugin"; Flags: ignoreversion
+Source: "plugin\{#PluginFile}"; DestDir: "{app}\plugin"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#AppName}"; Filename: "{app}\HapticBridge.exe"

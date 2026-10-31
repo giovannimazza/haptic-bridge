@@ -1,0 +1,119 @@
+name: Release
+
+# Builds the app and the installer on GitHub's runners. When a SignPath token is configured and the run is for a tag,
+# the binaries are signed in two steps (the app files, then the finished installer) and attached to a GitHub release.
+# Without the token the same workflow still runs and produces unsigned files. See docs/code-signing.md.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write   # create the release
+
+env:
+  # Secrets cannot be used directly in `if:`, so expose "is it set" as a plain variable.
+  SIGN: ${{ secrets.SIGNPATH_API_TOKEN != '' && github.ref_type == 'tag' }}
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Version
+        shell: pwsh
+        run: |
+          $v = '0.0.0'
+          if ($env:GITHUB_REF_TYPE -eq 'tag') { $v = $env:GITHUB_REF_NAME.TrimStart('v') }
+          "VERSION=$v" >> $env:GITHUB_ENV
+
+      - name: Unit tests
+        run: dotnet test tests/HapticBridge.Tests --filter "Category!=Live" --nologo
+
+      - name: Publish app
+        run: dotnet publish app -c Release -r win-x64 --self-contained true -p:Version=${{ env.VERSION }} -o publish
+
+      # ---- sign the app's own binaries ----
+      - name: Upload unsigned app files
+        if: env.SIGN == 'true'
+        id: unsigned-app
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-app
+          path: |
+            publish/HapticBridge.exe
+            publish/HapticBridge.dll
+
+      - name: Sign app files
+        if: env.SIGN == 'true'
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: haptic-bridge
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: app
+          github-artifact-id: ${{ steps.unsigned-app.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signed-app
+          parameters: |
+            version: "${{ env.VERSION }}"
+
+      - name: Put signed files into the publish folder
+        if: env.SIGN == 'true'
+        shell: pwsh
+        run: Copy-Item signed-app\* publish\ -Force
+
+      # ---- installer ----
+      - name: Install Inno Setup
+        run: choco install innosetup -y --no-progress
+
+      - name: Build installer
+        shell: pwsh
+        run: '& "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" /DAppVersion=${{ env.VERSION }} installer\HapticBridge.iss'
+
+      - name: Upload unsigned installer
+        if: env.SIGN == 'true'
+        id: unsigned-installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-installer
+          path: dist/HapticBridge-Setup-${{ env.VERSION }}.exe
+
+      - name: Sign installer
+        if: env.SIGN == 'true'
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: haptic-bridge
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: installer
+          github-artifact-id: ${{ steps.unsigned-installer.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signed-installer
+          parameters: |
+            version: "${{ env.VERSION }}"
+
+      - name: Put signed installer into dist
+        if: env.SIGN == 'true'
+        shell: pwsh
+        run: Copy-Item signed-installer\* dist\ -Force
+
+      - name: Keep the build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ env.VERSION }}
+          path: dist/HapticBridge-Setup-${{ env.VERSION }}.exe
+
+      - name: Create release
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create $env:GITHUB_REF_NAME "dist/HapticBridge-Setup-${{ env.VERSION }}.exe" installer/plugin/Haptic_1_0.lplug4 --title "Haptic Bridge ${{ env.VERSION }}" --generate-notes
