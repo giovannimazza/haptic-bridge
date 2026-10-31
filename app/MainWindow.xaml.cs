@@ -26,7 +26,8 @@ namespace HapticGamingBridge
         private readonly System.Windows.Forms.NotifyIcon _tray = new();
         private readonly DispatcherTimer _testTimer = new() { Interval = TimeSpan.FromMilliseconds(350) };
         private bool _capturing, _exiting, _syncing;
-        private int _runningTicks;
+        private int _runningTicks, _pluginTicks;
+        private bool _pluginReady;
         private Rule _editing;          // rule being edited, null when adding
         private string _editInput;      // captured trigger for the editor
 
@@ -103,8 +104,13 @@ namespace HapticGamingBridge
                 foreach (var p in _profiles) p.IsRunning = running.Contains(Path.GetFileNameWithoutExtension(p.Exe));
             }
 
-            StatusText.Text = _sender.Connected ? "Plugin connected" : "Plugin: waiting";
-            StatusPill.Background = _sender.Connected ? (Brush)FindResource("Green") : (Brush)FindResource("Hover");
+            // Pipe check is cheap, but not free: do it with the process list refresh, every 2 s.
+            if (_pluginTicks++ % 4 == 0) _pluginReady = PipeSender.PluginAvailable();
+            StatusText.Text = _pluginReady ? "Plugin ready" : "Plugin not found";
+            StatusText.ToolTip = _pluginReady ? "The Logi Options+ plugin is running; haptic events will be sent to it."
+                : "Start Logi Options+ and install the Haptic Gaming Bridge plugin. Until then nothing will vibrate.";
+            StatusPill.Background = _pluginReady ? (Brush)FindResource("Green") : (Brush)FindResource("Orange");
+            StatusText.Foreground = _pluginReady ? (Brush)FindResource("Text") : Brushes.Black;   // dark text stays readable on orange
         }
 
         private void EnabledSwitch_Click(object sender, RoutedEventArgs e) => _engine.Enabled = EnabledSwitch.IsChecked == true;

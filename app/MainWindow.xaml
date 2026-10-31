@@ -21,7 +21,7 @@
                 </Border>
                 <TextBlock DockPanel.Dock="Left" Text="Haptic Gaming Bridge" Foreground="{StaticResource Text}" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0" />
                 <Border x:Name="StatusPill" DockPanel.Dock="Right" CornerRadius="14" Padding="12,5" Background="{StaticResource Hover}" VerticalAlignment="Center" Margin="16,0,0,0">
-                    <TextBlock x:Name="StatusText" Text="Plugin: waiting" Foreground="{StaticResource Text}" FontSize="12" FontWeight="SemiBold" />
+                    <TextBlock x:Name="StatusText" Text="Plugin not found" Foreground="{StaticResource Text}" FontSize="12" FontWeight="SemiBold" />
                 </Border>
                 <CheckBox x:Name="EnabledSwitch" DockPanel.Dock="Right" Style="{StaticResource Switch}" IsChecked="True" Content="Haptics on"
                           VerticalAlignment="Center" Click="EnabledSwitch_Click" />
