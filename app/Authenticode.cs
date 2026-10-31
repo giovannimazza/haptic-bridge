@@ -80,8 +80,10 @@ namespace HapticGamingBridge
         // The subject of the certificate that signed the file ("CN=..., O=..."), or "" when it cannot be read.
         public static string SignerSubject(string path)
         {
+#pragma warning disable SYSLIB0057   // there is no replacement that reads the signer of an Authenticode-signed file
             try { return new X509Certificate2(X509Certificate.CreateFromSignedFile(path)).Subject; }
             catch { return ""; }
+#pragma warning restore SYSLIB0057
         }
     }
 }
