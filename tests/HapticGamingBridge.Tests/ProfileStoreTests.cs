@@ -96,7 +96,7 @@ namespace HapticGamingBridge.Tests
             var p = P("a.exe", many); p.Name = new string('x', 10_000);
             var clean = Assert.Single(ProfileStore.Sanitize(new[] { p }));
             Assert.Equal(ProfileStore.MaxRulesPerProfile, clean.Rules.Count);
-            Assert.Equal(ProfileStore.MaxTextLength, clean.Name.Length);
+            Assert.Equal(ProfileNames.MaxLength, clean.Name.Length);
         }
 
         // Reading an icon from \\server\share makes Windows open an SMB connection and send the user's NTLM hash.

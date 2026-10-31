@@ -25,7 +25,7 @@ namespace HapticGamingBridge
         private readonly Stopwatch _clock = Stopwatch.StartNew();
         private readonly System.Windows.Forms.NotifyIcon _tray = new();
         private readonly DispatcherTimer _testTimer = new() { Interval = TimeSpan.FromMilliseconds(350) };
-        private bool _capturing, _exiting, _syncing;
+        private bool _capturing, _exiting, _syncing, _rpmEditing, _rpmSync;
         private int _runningTicks, _pluginTicks;
         private bool _pluginReady;
         private Rule _editing;          // rule being edited, null when adding
@@ -51,7 +51,7 @@ namespace HapticGamingBridge
             _hook.Input += OnInput;
 
             // The hook only raises events; repeat and profile switching run on timers.
-            var tick = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
+            var tick = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };   // Windows rounds this to about 15 ms
             tick.Tick += (_, _) => _engine.Tick();
             tick.Start();
             var fg = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
@@ -130,7 +130,32 @@ namespace HapticGamingBridge
         }
 
         // The switch writes the flag through its binding; saving here also covers keyboard and accessibility toggles.
-        private void WatchEnabled(Profile p) => p.PropertyChanged += (_, e) => { if (e.PropertyName == nameof(Profile.Enabled)) Save(); };
+        private void WatchEnabled(Profile p) => p.PropertyChanged += (_, e) => { if (e.PropertyName is nameof(Profile.Enabled) or nameof(Profile.Name)) Save(); };
+
+        private void Rename_Click(object sender, RoutedEventArgs e) => Rename(Selected);
+
+        private void RenameRow_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount != 2 || (sender as FrameworkElement)?.DataContext is not Profile p) return;
+            Rename(p);
+            e.Handled = true;
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // F2 renames the selected profile, unless the user is typing somewhere or on the Info page.
+            if (e.Key != Key.F2 || Keyboard.FocusedElement is TextBox || InfoView.Visibility == Visibility.Visible) return;
+            Rename(Selected);
+            e.Handled = true;
+        }
+
+        private void Rename(Profile p)
+        {
+            if (p == null) return;
+            var typed = DialogWindow.Prompt(this, "Rename profile", "Choose a name for this profile. It only changes what you see here, not the game.", p.Name);
+            var name = ProfileNames.Clean(typed);
+            if (name != null) p.Name = name;   // saved by the property watcher
+        }
 
         private void EnabledSwitch_Click(object sender, RoutedEventArgs e)
         {
@@ -186,7 +211,7 @@ namespace HapticGamingBridge
         private void ChangeApp_Click(object sender, RoutedEventArgs e)
         {
             if (Selected is not { } p || Pick() is not { } dlg) return;
-            p.Name = dlg.ResultName;
+            p.Name = ProfileNames.AfterChangingApp(p.Name, p.Exe, dlg.ResultName);   // keeps a name the user chose
             p.Exe = dlg.ResultPath;
             Save();
         }
@@ -274,14 +299,49 @@ namespace HapticGamingBridge
             _syncing = true;
             CooldownBox.Text = ((int)e.NewValue).ToString();
             _syncing = false;
+            ShowRate();
         }
 
         private void CooldownBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (_syncing || !int.TryParse(CooldownBox.Text, out var v)) return;
-            _syncing = true;
-            CooldownSlider.Value = Math.Clamp(v, 0, 1000);
-            _syncing = false;
+            if (!_syncing && int.TryParse(CooldownBox.Text, out var v))
+            {
+                _syncing = true;
+                CooldownSlider.Value = Math.Clamp(v, 0, 1000);
+                _syncing = false;
+            }
+            ShowRate();
+        }
+
+        // Typing a rate of fire sets the cooldown; the cooldown, the slider and the presets all feed back into the rate box.
+        private void RpmBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_rpmSync) return;
+            _rpmEditing = true;   // keep what the user typed: 700 per minute is 86 ms, which would read back as 698
+            try
+            {
+                if (FireRate.TryParse(RpmBox.Text, out var rpm) && FireRate.ToCooldownMs(rpm) is int ms) CooldownBox.Text = ms.ToString();
+            }
+            finally { _rpmEditing = false; }
+        }
+
+        // Leaving the box with something that is not a usable rate puts back the rate that matches the cooldown.
+        private void RpmBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (!FireRate.TryParse(RpmBox.Text, out var rpm) || FireRate.ToCooldownMs(rpm) is null) ShowRate();
+        }
+
+        private void Rpm_Preset_Click(object sender, RoutedEventArgs e) => RpmBox.Text = (string)((FrameworkElement)sender).Tag;
+
+        private void ShowRate()
+        {
+            var ok = int.TryParse(CooldownBox.Text, out var cd) && cd >= 0;
+            RateHint.Text = ok ? FireRate.Describe(cd) : "Type a whole number of milliseconds.";
+            RateHint.Foreground = ok && cd > 0 && cd < FireRate.ApproximateBelowMs ? (Brush)FindResource("Orange") : (Brush)FindResource("Muted");
+            if (_rpmEditing) return;
+            _rpmSync = true;
+            RpmBox.Text = ok ? FireRate.ToRoundsPerMinute(cd)?.ToString() ?? "" : "";
+            _rpmSync = false;
         }
 
         private void SaveAction_Click(object sender, RoutedEventArgs e)

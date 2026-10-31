@@ -17,6 +17,7 @@
             <StackPanel>
                 <TextBlock x:Name="TitleText" Foreground="{StaticResource Text}" FontSize="18" FontWeight="SemiBold" />
                 <TextBlock x:Name="MessageText" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,8,0,0" LineHeight="20" />
+                <TextBox x:Name="InputBox" Visibility="Collapsed" Margin="0,14,0,0" MaxLength="60" />
             </StackPanel>
         </DockPanel>
 

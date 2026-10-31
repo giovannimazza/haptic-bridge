@@ -32,8 +32,9 @@ The Actions SDK lets a plugin raise haptic events, but only from the plugin's ow
 
 ## Features
 
-- Profiles per game, with icon, running indicator and a foreground marker
+- Profiles per game, with icon, running indicator and a foreground marker; rename a profile with the pencil, a double-click on its name or F2
 - Actions with trigger (key or mouse button), haptic pattern, required modifier (Shift, Control, Alt, Left Mouse, Right Mouse), cooldown and hold-to-repeat
+- Rounds-per-minute converter: type a weapon's rate of fire and the cooldown is set for you ([details](docs/fire-rate.md))
 - Global on/off switch and a per-profile switch to turn a game off without deleting it, test button for each pattern, tray icon, dark UI, an Info tab with a short guide
 - Profiles stored as JSON in `%APPDATA%\HapticGamingBridge\profiles.json`
 
@@ -94,6 +95,24 @@ Patterns are fixed. The SDK only offers predefined waveforms, so adding a patter
 
 To add one: declare it in `HapticGamingBridgePlugin/src/package/events/DefaultEventSource.yaml`, map it in `events/extra/eventMapping.yaml`, and add it to `Events.Patterns` in `app/Models.cs`.
 
+## Fire rate (rounds per minute)
+
+In the action editor, type a weapon's rate of fire in **Rounds per minute** and the cooldown is set for you. The two boxes stay in sync, so changing the cooldown updates the rate, and the slider and the quick buttons (300, 600, 900, 1200) work on both. With **Repeat while held** on, the pulse repeats at that rate while you hold the button.
+
+```
+cooldown (ms) = 60000 / rounds per minute
+```
+
+| Rounds per minute | Cooldown |
+|---|---|
+| 300 | 200 ms |
+| 600 | 100 ms |
+| 750 | 80 ms |
+| 900 | 67 ms |
+| 1200 | 50 ms |
+
+The repeat timer is accurate to about 15 ms. Shots are scheduled on a fixed grid, so the average rate is exact even though single shots can be a few milliseconds early or late. Below 50 ms (above 1200 per minute) that jitter is a large part of the interval, so the editor marks the rate as approximate; the lowest cooldown it will set is 20 ms. The mouse itself may also merge pulses that arrive very close together. See [docs/fire-rate.md](docs/fire-rate.md) for the details.
+
 ## Limits and known issues
 
 - **Timing.** The mouse merges or drops events that arrive too fast. In a raw test, events 600 ms apart all arrived, while at 400 ms only 3 of 5 did. Hold-to-repeat with a 75 ms cooldown felt natural by ear, but it is a perceptual choice, not a measured guarantee. The first event after a pause arrives slightly late. The repeat timer ticks every 50 ms, so that is the practical minimum.
@@ -153,7 +172,7 @@ un-testroom.ps1 -SkipLive  # without the tests that talk to the running plugin
 
 The test room runs:
 
-- **Unit tests** (`tests/HapticGamingBridge.Tests`): input engine (cooldown, hold-to-repeat, modifiers, global switch, extreme values), the pipe sender with and without a plugin (nothing blocks, nothing piles up, no replay of old events, reconnect), and loading of `profiles.json`, which is treated as untrusted input: malformed or oversized files, unknown event names, out-of-range cooldowns, and executable paths pointing at network shares.
+- **Unit tests** (`tests/HapticGamingBridge.Tests`): input engine (cooldown, hold-to-repeat, modifiers, global switch, extreme values), the fire-rate converter and whether held fire really delivers the requested rate, the pipe sender with and without a plugin (nothing blocks, nothing piles up, no replay of old events, reconnect), and loading of `profiles.json`, which is treated as untrusted input: malformed or oversized files, unknown event names, out-of-range cooldowns, and executable paths pointing at network shares.
 - **Live security tests** against the plugin running in Logi Options+: malformed and oversized event names, binary garbage, an undeclared event name, a silent connection that must not block other clients, a burst of events, and the pipe's access list (current user only). They need Options+ running with the plugin loaded and close the desktop app first. They make the mouse buzz briefly.
 - **NuGet vulnerability scan** of all projects.
 - **Secret scan** of the files in the repository.

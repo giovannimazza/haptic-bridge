@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
@@ -47,6 +48,31 @@ namespace HapticGamingBridge
         [JsonIgnore] public bool IsRunning { get => _running; set { if (_running != value) { _running = value; Raise(); } } }
         [JsonIgnore] public ImageSource Icon => IconCache.Get(Exe);
         public override string ToString() => Name;
+    }
+
+    public static class ProfileNames
+    {
+        public const int MaxLength = 60;
+
+        // A tidy display name, or null when nothing usable is left: control characters and runs of whitespace become one
+        // space, the ends are trimmed and the length is capped.
+        public static string Clean(string name)
+        {
+            if (name == null) return null;
+            var s = Regex.Replace(name, @"[\p{Cc}\s]+", " ").Trim();
+            if (s.Length > MaxLength) s = s[..MaxLength].TrimEnd();
+            return s.Length == 0 ? null : s;
+        }
+
+        // "Change app" renames the profile after the new program only when its name was just the old program's name
+        // (or the placeholder); a name the user chose is kept.
+        public static string AfterChangingApp(string currentName, string oldExe, string newDefaultName)
+        {
+            var oldDefault = Path.GetFileNameWithoutExtension(oldExe ?? "");
+            var current = (currentName ?? "").Trim();
+            var wasDefault = current == "" || current == "New profile" || string.Equals(current, oldDefault, StringComparison.OrdinalIgnoreCase);
+            return wasDefault ? newDefaultName : currentName;
+        }
     }
 
     public static class ProfileMatcher

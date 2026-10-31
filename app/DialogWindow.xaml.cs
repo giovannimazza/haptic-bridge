@@ -18,6 +18,20 @@ namespace HapticGamingBridge
             return d.ShowDialog() == true;
         }
 
+        // Asks for a line of text; returns what was typed, or null when cancelled.
+        public static string Prompt(Window owner, string title, string message, string initial, string ok = "Save")
+        {
+            var d = new DialogWindow(title, message) { Owner = owner };
+            d.IconText.Text = "\uE70F";   // pencil
+            d.IconText.Foreground = (Brush)Application.Current.FindResource("Accent");
+            d.InputBox.Visibility = Visibility.Visible;
+            d.InputBox.Text = initial ?? "";
+            d.YesBtn.Content = ok;
+            d.NoBtn.Content = "Cancel";
+            d.Loaded += (_, _) => { d.InputBox.Focus(); d.InputBox.SelectAll(); };
+            return d.ShowDialog() == true ? d.InputBox.Text : null;
+        }
+
         public static void Info(Window owner, string title, string message)
         {
             var d = new DialogWindow(title, message) { Owner = owner };

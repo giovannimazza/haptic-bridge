@@ -50,7 +50,7 @@ namespace HapticGamingBridge
 
             foreach (var p in profiles.Where(p => p != null).Take(MaxProfiles))
             {
-                var clean = new Profile { Name = Trim(p.Name, "Profile"), Exe = SafeExe(p.Exe), Enabled = p.Enabled };
+                var clean = new Profile { Name = ProfileNames.Clean(p.Name) ?? "Profile", Exe = SafeExe(p.Exe), Enabled = p.Enabled };
                 foreach (var r in (p.Rules ?? new()).Where(r => r != null).Take(MaxRulesPerProfile))
                 {
                     // Event names go to the plugin over the pipe, so only known ones survive.

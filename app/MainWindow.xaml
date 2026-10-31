@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:HapticGamingBridge"
-        Title="Haptic Gaming Bridge" Width="1180" Height="740" MinWidth="960" MinHeight="580" Background="{StaticResource Bg}">
+        PreviewKeyDown="Window_PreviewKeyDown" Title="Haptic Gaming Bridge" Width="1180" Height="740" MinWidth="960" MinHeight="580" Background="{StaticResource Bg}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -52,7 +52,8 @@
                                     <Image Source="{Binding Icon}" Margin="3" />
                                 </Border>
                                 <StackPanel x:Name="RowName" Orientation="Horizontal" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding Name}" Foreground="{StaticResource Text}" FontWeight="SemiBold" MaxWidth="84" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Name}" Foreground="{StaticResource Text}" FontWeight="SemiBold" MaxWidth="84" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                                               MouseLeftButtonDown="RenameRow_MouseDown" ToolTip="Double-click to rename" />
                                     <ContentControl Style="{StaticResource RunIcon}" FontSize="14" Margin="8,0,0,0" />
                                 </StackPanel>
                             </DockPanel>
@@ -86,18 +87,22 @@
                 <!-- Game header -->
                 <Border DockPanel.Dock="Top" Background="{StaticResource Card}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="18,14" Margin="0,0,0,18">
                     <DockPanel>
-                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                        <WrapPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,14,0,0">
                             <Button Content="Change app" Style="{StaticResource Btn}" Padding="12,7" Click="ChangeApp_Click" />
                             <Button Content="Duplicate" Style="{StaticResource Btn}" Padding="12,7" Margin="8,0" Click="Duplicate_Click" />
                             <Button Content="+ Add action" Style="{StaticResource BtnPrimary}" Padding="14,7" Click="AddAction_Click" />
-                        </StackPanel>
+                        </WrapPanel>
                         <Border DockPanel.Dock="Left" Width="44" Height="44" CornerRadius="10" Background="{StaticResource Field}" Margin="0,0,14,0">
                             <Image Source="{Binding Icon}" Margin="6" />
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Name}" Foreground="{StaticResource Text}" FontSize="22" FontWeight="Bold" MaxWidth="320" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Name}" Foreground="{StaticResource Text}" FontSize="22" FontWeight="Bold" MaxWidth="320" TextTrimming="CharacterEllipsis"
+                                           MouseLeftButtonDown="RenameRow_MouseDown" />
                                 <ContentControl Style="{StaticResource RunIcon}" FontSize="18" Margin="10,3,0,0" />
+                                <Button Style="{StaticResource BtnIcon}" Background="Transparent" BorderBrush="Transparent" Foreground="{StaticResource Muted}"
+                                        FontFamily="Segoe MDL2 Assets" Content="&#xE70F;" FontSize="14" Padding="7,5" Margin="6,2,0,0" VerticalAlignment="Center"
+                                        ToolTip="Rename profile (F2)" Click="Rename_Click" />
                                 <Border CornerRadius="10" Padding="9,3" Margin="12,4,0,0" Background="{StaticResource Hover}" VerticalAlignment="Center">
                                     <Border.Style>
                                         <Style TargetType="Border">
@@ -161,7 +166,7 @@
                         <Border Background="{StaticResource Row}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="18,14" Margin="0,4,14,0">
                             <StackPanel>
                                 <TextBlock Text="Tips" Foreground="{StaticResource Muted}" FontWeight="SemiBold" Margin="0,0,0,8" />
-                                <TextBlock Foreground="{StaticResource Muted}" FontSize="12" Margin="0,0,0,4" TextWrapping="Wrap" Text="• Shooting: map the fire button to a recoil pattern and turn on Hold." />
+                                <TextBlock Foreground="{StaticResource Muted}" FontSize="12" Margin="0,0,0,4" TextWrapping="Wrap" Text="• Shooting: map the fire button to a recoil pattern and turn on Hold. If you know the weapon's rounds per minute, type it in the action editor and the cooldown is set for you." />
                                 <TextBlock Foreground="{StaticResource Muted}" FontSize="12" Margin="0,0,0,4" TextWrapping="Wrap" Text="• Walking: Hold on with a cooldown near 160 ms feels like footsteps." />
                                 <TextBlock Foreground="{StaticResource Muted}" FontSize="12" TextWrapping="Wrap" Text="• Fewer mappings feel better than one on every control." />
                             </StackPanel>
@@ -171,13 +176,19 @@
             </DockPanel>
 
             <!-- Side editor: replaces the tips column while an action is open -->
-            <Border x:Name="EditorView" Grid.Column="1" Width="340" Margin="8,0,0,0" VerticalAlignment="Top" Visibility="Collapsed"
+            <Border x:Name="EditorView" Grid.Column="1" Width="340" Margin="8,0,0,0" VerticalAlignment="Stretch" Visibility="Collapsed"
                     Background="{StaticResource Card}" BorderBrush="{StaticResource Accent}" BorderThickness="1" CornerRadius="12" Padding="20">
-                <StackPanel>
-                    <DockPanel Margin="0,0,0,16">
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,16">
                         <Button DockPanel.Dock="Right" Content="x" Style="{StaticResource BtnIcon}" Click="EditorBack_Click" />
                         <TextBlock x:Name="EditorTitle" Text="Add New Action" Foreground="{StaticResource Text}" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" />
                     </DockPanel>
+                    <DockPanel DockPanel.Dock="Bottom" Margin="0,16,0,0" LastChildFill="False">
+                        <Button DockPanel.Dock="Right" Content="Save" Style="{StaticResource BtnPrimary}" Padding="24,9" Click="SaveAction_Click" />
+                        <Button DockPanel.Dock="Right" Content="Cancel" Style="{StaticResource Btn}" Margin="0,0,8,0" Click="EditorBack_Click" />
+                    </DockPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,0,8,0">
 
                     <TextBlock Text="Trigger type" Foreground="{StaticResource Muted}" FontSize="11" Margin="0,0,0,6" />
                     <ComboBox x:Name="TypeBox" SelectionChanged="TypeBox_SelectionChanged" />
@@ -200,13 +211,24 @@
                                 VerticalAlignment="Center" ValueChanged="CooldownSlider_ValueChanged" />
                     </DockPanel>
 
+                    <TextBlock Text="Rounds per minute (sets the cooldown for you)" Foreground="{StaticResource Muted}" FontSize="11" Margin="0,14,0,6" />
+                    <DockPanel>
+                        <TextBox x:Name="RpmBox" DockPanel.Dock="Left" Width="76" TextAlignment="Center" TextChanged="RpmBox_TextChanged" LostFocus="RpmBox_LostFocus"
+                                 ToolTip="A weapon's rate of fire, for example 600. Cooldown = 60000 / rounds per minute." />
+                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0" VerticalAlignment="Center">
+                            <Button Content="300" Tag="300" Style="{StaticResource BtnIcon}" Click="Rpm_Preset_Click" Margin="0,0,4,0" />
+                            <Button Content="600" Tag="600" Style="{StaticResource BtnIcon}" Click="Rpm_Preset_Click" Margin="0,0,4,0" />
+                            <Button Content="900" Tag="900" Style="{StaticResource BtnIcon}" Click="Rpm_Preset_Click" Margin="0,0,4,0" />
+                            <Button Content="1200" Tag="1200" Style="{StaticResource BtnIcon}" Click="Rpm_Preset_Click" />
+                        </StackPanel>
+                    </DockPanel>
+                    <TextBlock x:Name="RateHint" Foreground="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,8,0,0" />
+
                     <CheckBox x:Name="HoldBox" Content="Repeat while held" Margin="0,16,0,0" />
 
-                    <DockPanel Margin="0,22,0,0" LastChildFill="False">
-                        <Button DockPanel.Dock="Right" Content="Save" Style="{StaticResource BtnPrimary}" Padding="24,9" Click="SaveAction_Click" />
-                        <Button DockPanel.Dock="Right" Content="Cancel" Style="{StaticResource Btn}" Margin="0,0,8,0" Click="EditorBack_Click" />
-                    </DockPanel>
-                </StackPanel>
+                    </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
             </Border>
         </Grid>
 
@@ -226,7 +248,7 @@
                             <TextBlock Text="Getting started" Foreground="{StaticResource Text}" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
                             <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,0,0,0" Text="1.  Install the Logi Options+ plugin (the installer offers it) and keep Logi Options+ running." />
                             <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="2.  Press  + New profile  and pick your game from the running programs, or browse to its .exe." />
-                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="3.  Press  + Add action : choose a key or mouse button, a haptic pattern, an optional modifier, a cooldown and whether to repeat while held. Use Test to feel the pattern." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="3.  Press  + Add action : choose a key or mouse button, a haptic pattern, an optional modifier, a cooldown (or type a rounds-per-minute value and the cooldown is worked out for you) and whether to repeat while held. Use Test to feel the pattern." />
                             <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="4.  Play. The green dot next to a profile shows which one is active right now; only the game in the foreground triggers vibrations." />
                         </StackPanel>
                     </Border>
@@ -234,8 +256,9 @@
                         <StackPanel>
                             <TextBlock Text="Good to know" Foreground="{StaticResource Text}" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
                             <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,0,0,0" Text="The pill at the top shows whether the plugin is running. Orange (Plugin not found) means nothing will vibrate until Logi Options+ and the plugin are running." />
-                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="The switch at the top turns all haptics on or off. The small switch next to a profile turns just that profile off, without deleting its actions." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="The switch at the top turns all haptics on or off. The small switch next to a profile turns just that profile off, without deleting its actions. To rename a profile, press the pencil next to its name, double-click the name, or press F2." />
                             <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="Cooldown is the minimum time between two pulses. The mouse merges or drops pulses that arrive too close together, so a very short cooldown does not feel faster. With Hold, around 75 to 350 ms feels natural for shooting and around 160 ms for footsteps." />
+                            <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="Rounds per minute: to match a weapon's rate of fire, type it in the action editor. The cooldown is 60000 divided by that number, so 600 rounds per minute is a 100 ms cooldown, and the two boxes stay in sync. Turn on Hold so the pulse repeats at that rate. Below 50 ms (above 1200 per minute) the real rate is only approximate." />
                             <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="Each trigger is a short pulse. The mouse cannot hold a continuous vibration." />
                             <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="If a game runs as administrator, run Haptic Gaming Bridge as administrator too, otherwise Windows hides the game's input from it." />
                             <TextBlock Foreground="{StaticResource Muted}" TextWrapping="Wrap" LineHeight="21" Margin="0,6,0,0" Text="Not tested with anti-cheat software." />

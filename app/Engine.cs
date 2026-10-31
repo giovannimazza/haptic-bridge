@@ -54,7 +54,14 @@ namespace HapticGamingBridge
         private void TryFire(Rule rule)
         {
             var now = _nowMs();
-            if (_last.TryGetValue(rule, out var t) && now - t < rule.CooldownMs) return;
+            if (_last.TryGetValue(rule, out var t))
+            {
+                if (now - t < rule.CooldownMs) return;
+                // A held button repeats on a fixed grid: the next shot is scheduled from when this one was due, not from
+                // when the timer got round to it. Otherwise every shot runs a little late and the real rate is always
+                // slower than the configured one. After a long gap (button released for a while) start from now.
+                if (rule.Repeat && now - t < 2L * rule.CooldownMs) now = t + rule.CooldownMs;
+            }
             _last[rule] = now;
             _send(rule.Event);
         }
