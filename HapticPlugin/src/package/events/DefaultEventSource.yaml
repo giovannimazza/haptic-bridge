@@ -1,0 +1,27 @@
+displayName: Haptic Bridge
+description: Haptic events driven by the companion desktop app
+events:
+  - name: recoil_1
+    displayName: Kick
+    description: Haptic event Kick
+  - name: recoil_2
+    displayName: Thump
+    description: Haptic event Thump
+  - name: interact_1
+    displayName: Chime
+    description: Haptic event Chime
+  - name: interact_2
+    displayName: Click
+    description: Haptic event Click
+  - name: move
+    displayName: Step
+    description: Haptic event Step
+  - name: alert
+    displayName: Buzz
+    description: Haptic event Buzz
+  - name: done
+    displayName: Success
+    description: Haptic event Success
+  - name: knock
+    displayName: Knock
+    description: Haptic event Knock

@@ -1,0 +1,11 @@
+# Build output
+bin/
+obj/
+dist/
+
+# Scratch diagnostic tool, not part of the project
+loadtest/
+
+# IDE and user files
+.vs/
+*.user

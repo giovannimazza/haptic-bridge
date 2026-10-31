@@ -1,0 +1,17 @@
+haptics:
+  recoil_1:
+    DEFAULT: sharp_collision
+  recoil_2:
+    DEFAULT: damp_collision
+  interact_1:
+    DEFAULT: happy_alert
+  interact_2:
+    DEFAULT: sharp_state_change
+  move:
+    DEFAULT: subtle_collision
+  alert:
+    DEFAULT: angry_alert
+  done:
+    DEFAULT: completed
+  knock:
+    DEFAULT: knock
