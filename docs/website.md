@@ -1,6 +1,6 @@
 # The website
 
-A small static site in [`site/`](../site) (English at `/`, Italian at `/it/`): what the app is, a download button, how to check the download, a FAQ, the **Buy me a coffee** link and the link to GitHub. It has no build step, no framework and no external fonts, scripts or images.
+A small static site in [`site/`](../site) (English at `/`, Italian at `/it/`): what the app is, a download button, how to check the download, a FAQ, the **Support me on PayPal** and **Buy me a Ko-fi** buttons and the link to GitHub. It has no build step, no framework and no external fonts, scripts or images.
 
 ## How the download button stays current
 

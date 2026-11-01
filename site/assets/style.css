@@ -19,11 +19,11 @@ code, kbd { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; }
 
 /* ---- header ---- */
 header.top { position: sticky; top: 0; z-index: 10; background: rgba(16, 19, 26, .94); border-bottom: 1px solid var(--line); backdrop-filter: blur(8px); }
-header.top .wrap { display: flex; align-items: center; gap: 18px; min-height: 64px; flex-wrap: wrap; padding-top: 8px; padding-bottom: 8px; }
+header.top .wrap { display: flex; align-items: center; gap: 12px; min-height: 64px; flex-wrap: wrap; padding-top: 8px; padding-bottom: 8px; }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; font-size: 17px; }
 .brand img { width: 34px; height: 34px; border-radius: 8px; }
-nav.main { display: flex; gap: 4px; flex-wrap: wrap; margin-left: 6px; }
-nav.main a { color: var(--muted); text-decoration: none; padding: 7px 12px; border-radius: 8px; font-weight: 600; font-size: 15px; }
+nav.main { display: flex; gap: 4px; flex-wrap: wrap; margin-left: 0; }
+nav.main a { color: var(--muted); text-decoration: none; padding: 7px 9px; border-radius: 8px; font-weight: 600; font-size: 15px; }
 nav.main a:hover { color: var(--text); background: #1d2230; }
 .spacer { flex: 1; }
 .lang { color: var(--muted); font-size: 14px; text-decoration: none; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; }
@@ -35,15 +35,20 @@ nav.main a:hover { color: var(--text); background: #1d2230; }
 .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
 .btn-big { padding: 16px 30px; font-size: 18px; border-radius: 12px; }
-.btn-coffee { background: linear-gradient(135deg, #ffd27a, #ff9f43); border-color: transparent; color: #2b1b00; }
-.btn-coffee:hover { background: linear-gradient(135deg, #ffdc92, #ffac5c); color: #2b1b00; }
+.btn-paypal { background: linear-gradient(135deg, #1a8ad8, #0070ba); border-color: transparent; color: #fff; }
+.btn-paypal:hover { background: linear-gradient(135deg, #2c98e4, #0a7fcc); color: #fff; }
+.btn-paypal .pp { flex: none; font: italic 900 20px/1 system-ui, "Segoe UI", sans-serif; }
+.pp-front { fill: #fff; }
+.pp-back { fill: #9cd0ff; }
 .btn-kofi { background: linear-gradient(135deg, #ff7a77, #ff5e5b); border-color: transparent; color: #fff; }
 .btn-kofi:hover { background: linear-gradient(135deg, #ff8d8a, #ff706d); color: #fff; }
-.btn-coffee .cup, .btn-kofi .cup { display: inline-block; transform-origin: 50% 85%; }
-.btn-coffee:hover .cup, .btn-kofi:hover .cup { animation: shake .5s ease-in-out 1; }
+.btn-kofi .cup { display: inline-block; transform-origin: 50% 85%; }
+.btn-kofi:hover .cup { animation: shake .5s ease-in-out 1; }
 .btn-small { padding: 8px 14px; font-size: 14px; }
+header.top .btn-small { padding: 8px 11px; font-size: 13px; white-space: nowrap; }
+header.top .lang { padding: 6px 9px; }
 @keyframes shake { 0%, 100% { transform: rotate(0) } 15% { transform: rotate(-12deg) } 35% { transform: rotate(10deg) } 55% { transform: rotate(-8deg) } 75% { transform: rotate(6deg) } }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn-coffee:hover .cup, .btn-kofi:hover .cup { animation: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn-kofi:hover .cup { animation: none; } }
 
 /* ---- hero ---- */
 .hero { padding: 64px 0 40px; background: radial-gradient(900px 420px at 80% -10%, rgba(124, 108, 240, .28), transparent 60%); }

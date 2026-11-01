@@ -322,17 +322,17 @@
             </Setter>
         </Style>
 
-        <!-- Donation button for the header (PayPal and Ko-fi use it; label, colours and tooltip come from the button): warm gradient, and the cup shakes like a rumbling controller on hover -->
-        <Style x:Key="CoffeeBtn" TargetType="Button">
+        <!-- Ko-fi button for the header: coral gradient, and the cup shakes like a rumbling controller on hover -->
+        <Style x:Key="KofiBtn" TargetType="Button">
             <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="ToolTip" Value="Opens PayPal in your browser" />
-            <Setter Property="Content" Value="Buy me a coffee" />
-            <Setter Property="Foreground" Value="#2B1B00" />
+            <Setter Property="ToolTip" Value="Opens Ko-fi in your browser" />
+            <Setter Property="Content" Value="Buy me a Ko-fi" />
+            <Setter Property="Foreground" Value="White" />
             <Setter Property="Background">
                 <Setter.Value>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="#FFD27A" Offset="0" />
-                        <GradientStop Color="#FF9F43" Offset="1" />
+                        <GradientStop Color="#FF7A77" Offset="0" />
+                        <GradientStop Color="#FF5E5B" Offset="1" />
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
@@ -355,6 +355,53 @@
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetName="Shake" Storyboard.TargetProperty="Angle" From="-9" To="9"
                                                              Duration="0:0:0.06" AutoReverse="True" RepeatBehavior="9x" FillBehavior="Stop" />
+                                            <DoubleAnimation Storyboard.TargetName="Grow" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.12" />
+                                            <DoubleAnimation Storyboard.TargetName="Grow" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.12" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="Wiggle" />
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- PayPal button for the header: blue, with two overlapping P like the PayPal mark -->
+        <Style x:Key="PayPalBtn" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="ToolTip" Value="Opens PayPal in your browser" />
+            <Setter Property="Content" Value="Support me on PayPal" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#1A8AD8" Offset="0" />
+                        <GradientStop Color="#0070BA" Offset="1" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="B" CornerRadius="10" Padding="12,6" RenderTransformOrigin="0.5,0.5" Background="{TemplateBinding Background}">
+                            <Border.RenderTransform><ScaleTransform x:Name="Grow" ScaleX="1" ScaleY="1" /></Border.RenderTransform>
+                            <StackPanel Orientation="Horizontal">
+                                <Grid Width="20" Height="20" VerticalAlignment="Center">
+                                    <TextBlock Text="P" FontFamily="Segoe UI" FontSize="17" FontWeight="Black" FontStyle="Italic" Foreground="#9CD0FF" Margin="5,0,0,0" VerticalAlignment="Center" />
+                                    <TextBlock Text="P" FontFamily="Segoe UI" FontSize="17" FontWeight="Black" FontStyle="Italic" Foreground="White" Margin="1,1,0,0" VerticalAlignment="Center" />
+                                </Grid>
+                                <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" FontWeight="Bold" FontSize="13" Margin="7,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard x:Name="Wiggle">
+                                        <Storyboard>
                                             <DoubleAnimation Storyboard.TargetName="Grow" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.12" />
                                             <DoubleAnimation Storyboard.TargetName="Grow" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.12" />
                                         </Storyboard>

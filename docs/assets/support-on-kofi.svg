@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="320" height="56" viewBox="0 0 320 56" role="img" aria-label="Support on Ko-fi">
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="56" viewBox="0 0 320 56" role="img" aria-label="Buy me a Ko-fi">
   <defs>
     <linearGradient id="k" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#FF7A77"/>
@@ -12,5 +12,5 @@
   <path d="M18 26h30v8a14 14 0 0 1-14 14h-2a14 14 0 0 1-14-14z" fill="#FFFFFF"/>
   <path d="M48 29h3a5.5 5.5 0 0 1 0 11h-5" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round"/>
   <path d="M14 51h38" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
-  <text x="72" y="35" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">Support on Ko-fi</text>
+  <text x="72" y="35" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">Buy me a Ko-fi</text>
 </svg>

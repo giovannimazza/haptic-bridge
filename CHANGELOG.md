@@ -5,7 +5,7 @@ The version number is set in `app/app.csproj` and `installer/HapticGamingBridge.
 
 ## Not released yet
 
-- **Ko-fi**: a second, separate support button next to *Buy me a coffee* (PayPal), in the app header, the website and the README. The app may open only this project's GitHub pages and the maintainer's PayPal and Ko-fi pages.
+- **Ko-fi**: two separate support buttons, *Support me on PayPal* (blue) and *Buy me a Ko-fi* (red), in the app header, the website and the README. The app may open only this project's GitHub pages and the maintainer's PayPal and Ko-fi pages.
 
 ## 1.2.1
 

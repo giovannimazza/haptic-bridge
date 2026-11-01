@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://paypal.me/giovanbattistamazza"><img src="docs/assets/buy-me-a-coffee.svg" alt="Buy me a coffee" height="48"></a>
-  <a href="https://ko-fi.com/giovanbattistamazza"><img src="docs/assets/support-on-kofi.svg" alt="Support on Ko-fi" height="48"></a>
+  <a href="https://paypal.me/giovanbattistamazza"><img src="docs/assets/support-on-paypal.svg" alt="Support me on PayPal" height="48"></a>
+  <a href="https://ko-fi.com/giovanbattistamazza"><img src="docs/assets/support-on-kofi.svg" alt="Buy me a Ko-fi" height="48"></a>
 </p>
 
 # Haptic Gaming Bridge
