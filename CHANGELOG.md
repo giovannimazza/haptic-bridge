@@ -3,9 +3,9 @@
 All notable changes. Versions are the GitHub releases. A section marked "not released yet" is work on `main` that has no release.
 The version number is set in `app/app.csproj` and `installer/HapticGamingBridge.iss`; the release workflow refuses a tag that does not match it.
 
-## Not released yet
+## 1.2.2
 
-- **Ko-fi**: a *Buy me a Ko-fi* support button in the app header, the website and the README, replacing the PayPal one. The app may open only this project's GitHub pages and the maintainer's Ko-fi page.
+- **Ko-fi**: a *Buy me a Ko-fi* support button in the app header, the website and the README, replacing the PayPal one. The app may open only this project's GitHub pages and the maintainer's Ko-fi page. The PayPal button of earlier versions is gone; the cup icon is drawn as a vector so it is centred in the button.
 
 ## 1.2.1
 

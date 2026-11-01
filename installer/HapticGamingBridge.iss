@@ -3,7 +3,7 @@
 #define AppName "Haptic Gaming Bridge"
 ; CI overrides the version with /DAppVersion=<tag>
 #ifndef AppVersion
-  #define AppVersion "1.2.1"
+  #define AppVersion "1.2.2"
 #endif
 #define PluginFile "HapticGamingBridge_1_0.lplug4"
 
