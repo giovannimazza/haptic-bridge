@@ -3,6 +3,10 @@
 All notable changes. Versions are the GitHub releases. A section marked "not released yet" is work on `main` that has no release.
 The version number is set in `app/app.csproj` and `installer/HapticGamingBridge.iss`; the release workflow refuses a tag that does not match it.
 
+## Not released yet
+
+- **Ko-fi**: a second, separate support button next to *Buy me a coffee* (PayPal), in the app header, the website and the README. The app may open only this project's GitHub pages and the maintainer's PayPal and Ko-fi pages.
+
 ## 1.2.1
 
 - **New app icon**: a mouse in the centre with controller grips at the sides and vibration waves, in the app, the installer and the Logi plugin package. The plugin package was rebuilt for the new icon, so it is no longer identical to the one in 1.2.0. Its code is unchanged.

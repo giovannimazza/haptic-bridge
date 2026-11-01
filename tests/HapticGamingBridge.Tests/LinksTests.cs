@@ -4,7 +4,7 @@ using Xunit;
 namespace HapticGamingBridge.Tests
 {
     // The Info tab starts the default browser, so what it may open is restricted to the project's GitHub pages
-    // and the maintainer's PayPal donation page.
+    // and the maintainer's PayPal and Ko-fi donation pages.
     public class LinksTests
     {
         [Theory]
@@ -13,6 +13,7 @@ namespace HapticGamingBridge.Tests
         [InlineData("https://github.com/giovannimazza/haptic-bridge/releases")]
         [InlineData("https://github.com/giovannimazza/haptic-bridge#readme")]
         [InlineData("https://paypal.me/giovanbattistamazza")]
+        [InlineData("https://ko-fi.com/giovanbattistamazza")]
         public void Project_and_donation_pages_are_allowed(string url) => Assert.True(Links.IsAllowed(url));
 
         [Theory]
@@ -29,6 +30,12 @@ namespace HapticGamingBridge.Tests
         [InlineData("https://www.paypal.com/paypalme/giovanbattistamazza")]
         [InlineData("http://paypal.me/giovanbattistamazza")]
         [InlineData("https://user@paypal.me/giovanbattistamazza")]
+        [InlineData("https://ko-fi.com/someone-else")]
+        [InlineData("https://ko-fi.com/giovanbattistamazza-evil")]
+        [InlineData("https://ko-fi.com.evil.example/giovanbattistamazza")]
+        [InlineData("https://www.ko-fi.com/giovanbattistamazza")]
+        [InlineData("http://ko-fi.com/giovanbattistamazza")]
+        [InlineData("https://user@ko-fi.com/giovanbattistamazza")]
         [InlineData("file:///C:/Windows/System32/cmd.exe")]
         [InlineData("C:\\Windows\\System32\\cmd.exe")]
         [InlineData("calc.exe")]

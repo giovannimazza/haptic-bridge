@@ -24,6 +24,8 @@
                     <RadioButton x:Name="TabInfo" GroupName="Tabs" Content="Info" Style="{StaticResource TabBtn}" Margin="4,0,0,0" Checked="Tab_Checked" />
                 </StackPanel>
                 <Button DockPanel.Dock="Left" Style="{StaticResource CoffeeBtn}" Tag="https://paypal.me/giovanbattistamazza" Click="Link_Click" VerticalAlignment="Center" Margin="18,0,0,0" />
+                <Button DockPanel.Dock="Left" Style="{StaticResource CoffeeBtn}" Tag="https://ko-fi.com/giovanbattistamazza" Click="Link_Click" VerticalAlignment="Center" Margin="8,0,0,0"
+                        Content="Support on Ko-fi" Foreground="White" Background="#FF5E5B" ToolTip="Opens Ko-fi in your browser" />
                 <Border x:Name="StatusPill" DockPanel.Dock="Right" CornerRadius="14" Padding="12,5" Background="{StaticResource Hover}" VerticalAlignment="Center" Margin="16,0,0,0">
                     <TextBlock x:Name="StatusText" Text="Plugin not found" Foreground="{StaticResource Text}" FontSize="12" FontWeight="SemiBold" />
                 </Border>

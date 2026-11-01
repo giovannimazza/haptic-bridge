@@ -322,26 +322,30 @@
             </Setter>
         </Style>
 
-        <!-- Donation button for the header: warm gradient, and the cup shakes like a rumbling controller on hover -->
+        <!-- Donation button for the header (PayPal and Ko-fi use it; label, colours and tooltip come from the button): warm gradient, and the cup shakes like a rumbling controller on hover -->
         <Style x:Key="CoffeeBtn" TargetType="Button">
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="ToolTip" Value="Opens PayPal in your browser" />
+            <Setter Property="Content" Value="Buy me a coffee" />
+            <Setter Property="Foreground" Value="#2B1B00" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#FFD27A" Offset="0" />
+                        <GradientStop Color="#FF9F43" Offset="1" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="B" CornerRadius="10" Padding="12,6" RenderTransformOrigin="0.5,0.5">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#FFD27A" Offset="0" />
-                                    <GradientStop Color="#FF9F43" Offset="1" />
-                                </LinearGradientBrush>
-                            </Border.Background>
+                        <Border x:Name="B" CornerRadius="10" Padding="12,6" RenderTransformOrigin="0.5,0.5" Background="{TemplateBinding Background}">
                             <Border.RenderTransform><ScaleTransform x:Name="Grow" ScaleX="1" ScaleY="1" /></Border.RenderTransform>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#x2615;" FontFamily="Segoe UI Emoji" FontSize="16" Foreground="#2B1B00" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.85">
+                                <TextBlock Text="&#x2615;" FontFamily="Segoe UI Emoji" FontSize="16" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.85">
                                     <TextBlock.RenderTransform><RotateTransform x:Name="Shake" Angle="0" /></TextBlock.RenderTransform>
                                 </TextBlock>
-                                <TextBlock Text="Buy me a coffee" Foreground="#2B1B00" FontWeight="Bold" FontSize="13" Margin="7,0,0,0" VerticalAlignment="Center" />
+                                <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" FontWeight="Bold" FontSize="13" Margin="7,0,0,0" VerticalAlignment="Center" />
                             </StackPanel>
                         </Border>
                         <ControlTemplate.Triggers>

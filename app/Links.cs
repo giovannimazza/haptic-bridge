@@ -3,8 +3,8 @@ using System.Diagnostics;
 
 namespace HapticGamingBridge
 {
-    // The only place that starts another program: it opens this project's own GitHub pages, and the maintainer's PayPal
-    // donation page, in the default browser. Anything else is refused, so the Info tab cannot be turned into a launcher
+    // The only place that starts another program: it opens this project's own GitHub pages, and the maintainer's PayPal and Ko-fi
+    // donation pages, in the default browser. Anything else is refused, so the Info tab cannot be turned into a launcher
     // for arbitrary URLs or files.
     public static class Links
     {
@@ -12,6 +12,7 @@ namespace HapticGamingBridge
         public const string Issues = Repo + "/issues";
         public const string Releases = Repo + "/releases";
         public const string Coffee = "https://paypal.me/giovanbattistamazza";
+        public const string Kofi = "https://ko-fi.com/giovanbattistamazza";
 
         public static bool IsAllowed(string url)
         {
@@ -22,6 +23,9 @@ namespace HapticGamingBridge
                 return u.AbsolutePath == "/giovannimazza/haptic-bridge" || u.AbsolutePath.StartsWith("/giovannimazza/haptic-bridge/", StringComparison.Ordinal);
 
             if (u.Host == "paypal.me")
+                return u.AbsolutePath == "/giovanbattistamazza" || u.AbsolutePath == "/giovanbattistamazza/";
+
+            if (u.Host == "ko-fi.com")
                 return u.AbsolutePath == "/giovanbattistamazza" || u.AbsolutePath == "/giovanbattistamazza/";
 
             return false;

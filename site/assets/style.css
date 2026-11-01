@@ -37,11 +37,13 @@ nav.main a:hover { color: var(--text); background: #1d2230; }
 .btn-big { padding: 16px 30px; font-size: 18px; border-radius: 12px; }
 .btn-coffee { background: linear-gradient(135deg, #ffd27a, #ff9f43); border-color: transparent; color: #2b1b00; }
 .btn-coffee:hover { background: linear-gradient(135deg, #ffdc92, #ffac5c); color: #2b1b00; }
-.btn-coffee .cup { display: inline-block; transform-origin: 50% 85%; }
-.btn-coffee:hover .cup { animation: shake .5s ease-in-out 1; }
+.btn-kofi { background: linear-gradient(135deg, #ff7a77, #ff5e5b); border-color: transparent; color: #fff; }
+.btn-kofi:hover { background: linear-gradient(135deg, #ff8d8a, #ff706d); color: #fff; }
+.btn-coffee .cup, .btn-kofi .cup { display: inline-block; transform-origin: 50% 85%; }
+.btn-coffee:hover .cup, .btn-kofi:hover .cup { animation: shake .5s ease-in-out 1; }
 .btn-small { padding: 8px 14px; font-size: 14px; }
 @keyframes shake { 0%, 100% { transform: rotate(0) } 15% { transform: rotate(-12deg) } 35% { transform: rotate(10deg) } 55% { transform: rotate(-8deg) } 75% { transform: rotate(6deg) } }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn-coffee:hover .cup { animation: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn-coffee:hover .cup, .btn-kofi:hover .cup { animation: none; } }
 
 /* ---- hero ---- */
 .hero { padding: 64px 0 40px; background: radial-gradient(900px 420px at 80% -10%, rgba(124, 108, 240, .28), transparent 60%); }
