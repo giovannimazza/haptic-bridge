@@ -1,4 +1,4 @@
-/* Haptic Gaming Bridge site. No external fonts, scripts or images: everything comes from this folder. */
+﻿/* Haptic Gaming Bridge site. No external fonts, scripts or images: everything comes from this folder. */
 :root {
   --bg: #0b0d12; --panel: #10131a; --card: #151922; --line: #242a3a;
   --text: #eaedf5; --muted: #9aa3b8; --accent: #7c6cf0; --accent-hover: #8f81f5; --green: #2f9e5f;
@@ -42,7 +42,7 @@ nav.main a:hover { color: var(--text); background: #1d2230; }
 .pp-back { fill: #9cd0ff; }
 .btn-kofi { background: linear-gradient(135deg, #ff7a77, #ff5e5b); border-color: transparent; color: #fff; }
 .btn-kofi:hover { background: linear-gradient(135deg, #ff8d8a, #ff706d); color: #fff; }
-.btn-kofi .cup { display: inline-block; transform-origin: 50% 85%; }
+.btn-kofi .cup { display: inline-flex; line-height: 0; transform-origin: 50% 85%; }
 .btn-kofi:hover .cup { animation: shake .5s ease-in-out 1; }
 .btn-small { padding: 8px 14px; font-size: 14px; }
 header.top .btn-small { padding: 8px 11px; font-size: 13px; white-space: nowrap; }

@@ -342,9 +342,12 @@
                         <Border x:Name="B" CornerRadius="10" Padding="12,6" RenderTransformOrigin="0.5,0.5" Background="{TemplateBinding Background}">
                             <Border.RenderTransform><ScaleTransform x:Name="Grow" ScaleX="1" ScaleY="1" /></Border.RenderTransform>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#x2615;" FontFamily="Segoe UI Emoji" FontSize="16" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.85">
-                                    <TextBlock.RenderTransform><RotateTransform x:Name="Shake" Angle="0" /></TextBlock.RenderTransform>
-                                </TextBlock>
+                                <Grid Width="20" Height="20" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.85">
+                                    <Grid.RenderTransform><RotateTransform x:Name="Shake" Angle="0" /></Grid.RenderTransform>
+                                    <Path Data="M3.5,7 H14.5 V11.5 A4.5,4.5 0 0 1 10,16 H8 A4.5,4.5 0 0 1 3.5,11.5 Z" Fill="{TemplateBinding Foreground}" />
+                                    <Path Data="M14.5,8.5 H15.5 A2.2,2.2 0 0 1 15.5,12.9 H13.8" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
+                                    <Path Data="M7,4.8 C6.2,3.8 7.8,3.2 7,2 M10.5,4.8 C9.7,3.8 11.3,3.2 10.5,2" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.65" />
+                                </Grid>
                                 <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" FontWeight="Bold" FontSize="13" Margin="7,0,0,0" VerticalAlignment="Center" />
                             </StackPanel>
                         </Border>
