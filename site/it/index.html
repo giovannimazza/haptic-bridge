@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src https://api.github.com; base-uri 'none'; form-action 'none'">
+<title>Haptic Gaming Bridge: feedback aptico per i giochi con il Logitech MX Master 4</title>
+<meta name="description" content="Fai vibrare il tuo Logitech MX Master 4 come un controller. Scegli tu tasti e pulsanti del mouse per ogni gioco. Gratuito e open source per Windows.">
+<meta name="theme-color" content="#10131a">
+<link rel="icon" href="../assets/favicon.ico">
+<link rel="alternate" hreflang="en" href="../">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Vai al contenuto</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="../assets/icon-256.png" width="34" height="34" alt="">Haptic Gaming Bridge</a>
+    <nav class="main" aria-label="Principale">
+      <a href="#how">Come funziona</a>
+      <a href="#features">Funzioni</a>
+      <a href="#download">Download</a>
+      <a href="#faq">Domande</a>
+      <a href="https://github.com/giovannimazza/haptic-bridge">GitHub</a>
+    </nav>
+    <span class="spacer"></span>
+    <a class="btn btn-coffee btn-small" href="https://paypal.me/giovanbattistamazza"><span class="cup" aria-hidden="true">☕</span> Buy me a coffee</a>
+    <a class="lang" href="../" hreflang="en" lang="en">English</a>
+  </div>
+</header>
+
+<main id="main">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <h1>La vibrazione dei controller, sul tuo mouse.</h1>
+        <p class="lead">Haptic Gaming Bridge fa vibrare il tuo Logitech MX Master 4 quando premi i tasti e i pulsanti del mouse che scegli in un gioco, come il rumble di un controller. Lo imposti una volta per gioco.</p>
+        <div class="cta">
+          <a class="btn btn-primary btn-big" data-dl href="https://github.com/giovannimazza/haptic-bridge/releases/latest">Scarica per Windows</a>
+          <a class="btn" href="https://github.com/giovannimazza/haptic-bridge">Vedi su GitHub</a>
+        </div>
+        <p class="meta"><span data-version>Ultima versione</span> · <span data-size>circa 50 MB</span> · Windows 11 · gratuito e open source (MIT)</p>
+        <p class="note">L’installer non è ancora firmato digitalmente, quindi Windows può avvisarti prima di eseguirlo. <a href="#verify">Come controllare il download</a>.</p>
+      </div>
+      <figure class="shot">
+        <img src="../assets/screenshot-profile.png" width="1180" height="740" alt="La finestra di Haptic Gaming Bridge: a sinistra l’elenco dei profili dei giochi e, per il gioco selezionato, tre azioni che associano tasti e pulsanti del mouse a pattern aptici.">
+      </figure>
+    </div>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <h2>Come funziona</h2>
+      <p class="sub">Una piccola app per Windows guarda i tuoi tasti e i pulsanti del mouse e dice a un plugin di Logi Options+ quale vibrazione far suonare al mouse.</p>
+      <div class="grid3">
+        <div class="card"><span class="step">1</span><h3>Scegli un gioco</h3><p>Aggiungi un profilo per un gioco tra i programmi aperti, oppure cerca il suo .exe.</p></div>
+        <div class="card"><span class="step">2</span><h3>Associa i tasti ai pattern</h3><p>Scegli un tasto o un pulsante del mouse, uno degli otto pattern aptici e, se vuoi, un modificatore, un cooldown e “ripeti mentre è premuto”.</p></div>
+        <div class="card"><span class="step">3</span><h3>Gioca</h3><p>Vibra solo il profilo del gioco in primo piano. Puoi attivare o disattivare un profilo, o tutto, quando vuoi.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="features">
+    <div class="wrap">
+      <div class="grid2">
+        <div>
+          <h2>Segui la cadenza di fuoco di un’arma</h2>
+          <p class="sub flush">Scrivi i colpi al minuto di un’arma e il cooldown viene impostato da solo: 600 colpi al minuto sono 100 ms di cooldown. Attiva “ripeti mentre è premuto” e l’impulso si ripete a quel ritmo finché tieni premuto.</p>
+        </div>
+        <figure class="shot">
+          <img src="../assets/screenshot-editor.png" width="1180" height="740" loading="lazy" alt="L’editor delle azioni con il campo dei colpi al minuto a 600, che imposta il cooldown a 100 millisecondi.">
+        </figure>
+      </div>
+      <h2 class="gap">Cosa ottieni</h2>
+      <p class="sub">Piccolo, essenziale e sotto il tuo controllo.</p>
+      <ul class="features">
+        <li><strong>Un profilo per gioco</strong><span>Ogni gioco ha le sue associazioni. Quella giusta si sceglie da sola quando il gioco è in primo piano.</span></li>
+        <li><strong>Otto pattern aptici</strong><span>Da un tocco leggero a un colpo pesante, suonati dall’MX Master 4 tramite Logi Options+. Un pulsante di prova ti fa sentire ciascuno.</span></li>
+        <li><strong>Modificatori e tasto premuto</strong><span>Fai partire un pattern solo mentre tieni Shift, Control, Alt o un pulsante del mouse, e ripetilo finché un tasto resta premuto.</span></li>
+        <li><strong>Aggiornamenti sotto controllo</strong><span>L’app può proporre nuove versioni e installarle dopo aver controllato il checksum. Puoi spegnere tutto.</span></li>
+        <li><strong>Riservato per scelta</strong><span>Nessun account, nessuna telemetria. L’unico uso della rete è il controllo aggiornamenti, facoltativo, che invia solo nome e versione dell’app.</span></li>
+        <li><strong>Gratuito e open source</strong><span>Licenza MIT, con codice, build e test pubblici su GitHub.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="download">
+    <div class="wrap">
+      <h2>Download</h2>
+      <p class="sub">Installer per Windows dell’app. Installa anche il plugin di Logi Options+, se lasci l’opzione spuntata.</p>
+      <div class="dl">
+        <div class="card">
+          <a class="btn btn-primary btn-big" data-dl href="https://github.com/giovannimazza/haptic-bridge/releases/latest">Scarica per Windows</a>
+          <dl class="kv">
+            <dt>Versione</dt><dd data-version>Ultima release</dd>
+            <dt>Pubblicata</dt><dd data-date>vedi la pagina della release</dd>
+            <dt>Dimensione</dt><dd><span data-size>circa 50 MB</span></dd>
+            <dt>File</dt><dd><code data-installer-name>HapticGamingBridge-Setup-&lt;versione&gt;.exe</code></dd>
+            <dt>Licenza</dt><dd>MIT, uso libero</dd>
+          </dl>
+          <div id="verify" data-sha-block hidden>
+            <p class="label">SHA-256 dell’installer</p>
+            <div class="sha"><code id="sha" data-sha></code><button class="btn btn-small" type="button" data-copy="#sha" data-done="Copiato">Copia</button></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Cosa ti serve</h3>
+          <ul class="list">
+            <li>Windows 11</li>
+            <li>Un Logitech MX Master 4</li>
+            <li>Logi Options+ 1.95 o successivo, in esecuzione</li>
+          </ul>
+          <h3 class="gap-s">Disponibile anche</h3>
+          <ul class="links">
+            <li data-plugin-item hidden><a data-plugin href="https://github.com/giovannimazza/haptic-bridge/releases/latest">Solo il plugin di Logi Options+ (.lplug4)</a></li>
+            <li data-sums-item hidden><a data-sums href="https://github.com/giovannimazza/haptic-bridge/releases/latest">Checksum (SHA256SUMS.txt)</a></li>
+            <li><a data-notes href="https://github.com/giovannimazza/haptic-bridge/releases/latest">Note di rilascio</a></li>
+            <li><a href="https://github.com/giovannimazza/haptic-bridge/releases">Tutte le release</a></li>
+            <li><a href="https://github.com/giovannimazza/haptic-bridge/blob/main/CHANGELOG.md">Changelog</a> (in inglese)</li>
+          </ul>
+        </div>
+      </div>
+      <details class="gap-s">
+        <summary>Perché Windows mi avvisa, e come controllo il download?</summary>
+        <p>L’installer non è ancora firmato digitalmente (la firma per il progetto è in preparazione), quindi Windows SmartScreen può mostrare “Windows ha protetto il PC”. Prima di eseguirlo puoi verificare che il tuo file sia esattamente quello pubblicato su GitHub confrontando il suo SHA-256 con il valore qui sopra, o con quello sulla pagina della release.</p>
+        <p>In PowerShell, dalla cartella del download:</p>
+        <pre><code>Get-FileHash .\HapticGamingBridge-Setup-&lt;versione&gt;.exe -Algorithm SHA256</code></pre>
+        <p>I due valori devono essere identici. Se installi da questa pagina, l’app potrà poi aggiornarsi da sola: esegue solo un installer delle release GitHub di questo progetto il cui checksum coincide con quello pubblicato.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="alt" id="faq">
+    <div class="wrap">
+      <h2>Domande</h2>
+      <p class="sub">Risposte brevi. I dettagli completi sono nel README del progetto su GitHub (in inglese).</p>
+      <details><summary>Con quali mouse funziona?</summary><p>Solo con il Logitech MX Master 4, che ha il motorino aptico. La vibrazione passa da Logi Options+, che quindi deve essere installato e in esecuzione.</p></details>
+      <details><summary>Serve una connessione a internet?</summary><p>No. L’unica cosa che l’app fa in rete è un controllo aggiornamenti facoltativo (chiede a GitHub l’ultima release e invia solo nome e versione dell’app). Puoi spegnerlo nell’app, in Info → Updates, e allora non apre nessuna connessione di rete.</p></details>
+      <details><summary>Che cosa fa con tastiera e mouse?</summary><p>Per funzionare installa un hook globale di tastiera e mouse, così vede i tasti premuti e i pulsanti del mouse. Li confronta solo con le azioni che hai impostato e non li registra, non li salva e non li invia. I profili sono salvati sul tuo PC, in <code>%APPDATA%\HapticGamingBridge</code>.</p></details>
+      <details><summary>Funziona con i sistemi anti-cheat?</summary><p>Non è stato provato con software anti-cheat. Poiché usa un hook globale dell’input, controlla il regolamento di un gioco competitivo prima di usarlo.</p></details>
+      <details><summary>Servono i privilegi di amministratore?</summary><p>Non per installarlo: si installa solo per il tuo utente. Un gioco avviato come amministratore nasconde i suoi input ai programmi normali, e in quel caso anche l’app deve essere eseguita come amministratore.</p></details>
+      <details><summary>Può vibrare in modo continuo come un controller?</summary><p>No. Logi Options+ offre pattern di vibrazione brevi e predefiniti. Ogni evento è un impulso breve, e il mouse può unire impulsi che arrivano molto ravvicinati.</p></details>
+      <details><summary>È fatto da Logitech?</summary><p>No. È un progetto indipendente, non affiliato a Logitech e non approvato da Logitech.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="coffee-box">
+        <h2>Sostieni il progetto</h2>
+        <p>Haptic Gaming Bridge è gratuito, senza pubblicità né tracciamento. Se ha reso i tuoi giochi più belli da sentire, un caffè mi aiuta a continuare a migliorarlo. Del tutto facoltativo.</p>
+        <div class="row">
+          <a class="btn btn-coffee btn-big" href="https://paypal.me/giovanbattistamazza"><span class="cup" aria-hidden="true">☕</span> Buy me a coffee</a>
+          <a class="btn btn-big" href="https://github.com/giovannimazza/haptic-bridge">Metti una stella su GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="links-row">
+      <a href="https://github.com/giovannimazza/haptic-bridge">GitHub</a>
+      <a href="https://github.com/giovannimazza/haptic-bridge/releases">Release</a>
+      <a href="https://github.com/giovannimazza/haptic-bridge/blob/main/CHANGELOG.md">Changelog</a>
+      <a href="https://github.com/giovannimazza/haptic-bridge/blob/main/docs/updates.md">Come si controllano gli aggiornamenti</a>
+      <a href="https://github.com/giovannimazza/haptic-bridge#privacy-policy">Informativa sulla privacy</a>
+      <a href="https://github.com/giovannimazza/haptic-bridge/issues">Segnala un problema</a>
+      <a href="../" hreflang="en" lang="en">English</a>
+    </div>
+    <p>© 2026 giovannimazza. Rilasciato con licenza <a href="https://github.com/giovannimazza/haptic-bridge/blob/main/LICENSE">MIT</a>.</p>
+    <p>Questa pagina non usa cookie né statistiche. Per mostrare l’ultima versione, il tuo browser chiede a GitHub l’ultima release, quindi GitHub vede il tuo indirizzo, come per qualunque link verso di lui.</p>
+    <p>Progetto indipendente, non affiliato a Logitech e non approvato da Logitech. Logitech, MX Master e Logi Options+ sono marchi dei rispettivi proprietari.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>
