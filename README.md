@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://giovannimazza.github.io/haptic-bridge/"><img src="docs/assets/visit-website.svg" alt="Visit the website" height="48"></a>
+  <a href="https://giovannimazza.github.io/haptic-bridge/"><img src="docs/assets/website-banner.svg" alt="Visit the website" height="48"></a>
   <a href="https://ko-fi.com/giovanbattistamazza"><img src="docs/assets/support-on-kofi.svg" alt="Buy me a Ko-fi" height="48"></a>
 </p>
 
