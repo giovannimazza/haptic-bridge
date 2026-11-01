@@ -1,5 +1,4 @@
 <p align="center">
-  <a href="https://paypal.me/giovanbattistamazza"><img src="docs/assets/support-on-paypal.svg" alt="Support me on PayPal" height="48"></a>
   <a href="https://ko-fi.com/giovanbattistamazza"><img src="docs/assets/support-on-kofi.svg" alt="Buy me a Ko-fi" height="48"></a>
 </p>
 
@@ -208,7 +207,7 @@ Only binaries built from this repository by the [release workflow](.github/workf
 
 ### Privacy policy
 
-The only thing this program does on the network is look for updates: it asks GitHub (api.github.com) for the latest release of this project and, when you update, downloads the installer from GitHub. The request carries only the app name and version number, no profiles, no keys you press and no identifier; GitHub sees your IP address as any website does. You can switch this off under Info > Updates, and then the app makes no network connections at all. Apart from that, it does not transfer any information to other networked systems. To work, it installs a global keyboard and mouse hook so it can see key presses and mouse buttons; it only compares them with the actions you configured, and does not record, store or send them. It reads the name and path of the program in the foreground to select a profile. The only thing it saves is your profiles, in `%APPDATA%\HapticGamingBridge\profiles.json`. It talks to the Logi Options+ plugin over a local named pipe that only your Windows account can open. The Info tab has links to this repository and to a PayPal donation page; they open in your browser, and the app never contacts those sites itself. The Logi Options+ software and the haptic hardware have their own privacy policies.
+The only thing this program does on the network is look for updates: it asks GitHub (api.github.com) for the latest release of this project and, when you update, downloads the installer from GitHub. The request carries only the app name and version number, no profiles, no keys you press and no identifier; GitHub sees your IP address as any website does. You can switch this off under Info > Updates, and then the app makes no network connections at all. Apart from that, it does not transfer any information to other networked systems. To work, it installs a global keyboard and mouse hook so it can see key presses and mouse buttons; it only compares them with the actions you configured, and does not record, store or send them. It reads the name and path of the program in the foreground to select a profile. The only thing it saves is your profiles, in `%APPDATA%\HapticGamingBridge\profiles.json`. It talks to the Logi Options+ plugin over a local named pipe that only your Windows account can open. The Info tab has links to this repository and to a Ko-fi support page; they open in your browser, and the app never contacts those sites itself. The Logi Options+ software and the haptic hardware have their own privacy policies.
 
 ## Website
 

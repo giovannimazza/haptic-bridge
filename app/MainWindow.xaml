@@ -23,8 +23,7 @@
                     <RadioButton x:Name="TabProfiles" GroupName="Tabs" Content="Profiles" IsChecked="True" Style="{StaticResource TabBtn}" Checked="Tab_Checked" />
                     <RadioButton x:Name="TabInfo" GroupName="Tabs" Content="Info" Style="{StaticResource TabBtn}" Margin="4,0,0,0" Checked="Tab_Checked" />
                 </StackPanel>
-                <Button DockPanel.Dock="Left" Style="{StaticResource PayPalBtn}" Tag="https://paypal.me/giovanbattistamazza" Click="Link_Click" VerticalAlignment="Center" Margin="18,0,0,0" />
-                <Button DockPanel.Dock="Left" Style="{StaticResource KofiBtn}" Tag="https://ko-fi.com/giovanbattistamazza" Click="Link_Click" VerticalAlignment="Center" Margin="8,0,0,0" />
+                <Button DockPanel.Dock="Left" Style="{StaticResource KofiBtn}" Tag="https://ko-fi.com/giovanbattistamazza" Click="Link_Click" VerticalAlignment="Center" Margin="18,0,0,0" />
                 <Border x:Name="StatusPill" DockPanel.Dock="Right" CornerRadius="14" Padding="12,5" Background="{StaticResource Hover}" VerticalAlignment="Center" Margin="16,0,0,0">
                     <TextBlock x:Name="StatusText" Text="Plugin not found" Foreground="{StaticResource Text}" FontSize="12" FontWeight="SemiBold" />
                 </Border>

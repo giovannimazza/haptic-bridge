@@ -106,7 +106,7 @@ if (-not $hits) { Add-Result 'Network and process launching only in the updater 
 else { Add-Result 'Network and process launching only in the updater and the link opener' 'FAIL' ($hits -join "`n       ") }
 
 # 5b. Every web address written in the app or plugin belongs to a short list of hosts.
-$allowedHosts = 'github.com', 'api.github.com', 'paypal.me', 'ko-fi.com', 'release-assets.githubusercontent.com', 'objects.githubusercontent.com', 'github-releases.githubusercontent.com'
+$allowedHosts = 'github.com', 'api.github.com', 'ko-fi.com', 'release-assets.githubusercontent.com', 'objects.githubusercontent.com', 'github-releases.githubusercontent.com'
 $urlFiles = Source-Files @('app/*.cs', 'app/*.xaml', 'HapticGamingBridgePlugin/src/*.cs', 'HapticGamingBridgePlugin/src/**/*.cs')
 $strange = foreach ($f in $urlFiles) {
     Select-String -Path $f -Pattern 'https?://[^\s"''<>)\]}]+' -AllMatches | ForEach-Object {

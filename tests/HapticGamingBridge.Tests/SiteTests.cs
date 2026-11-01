@@ -54,7 +54,6 @@ namespace HapticGamingBridge.Tests
                 Assert.Equal(Uri.UriSchemeHttps, uri.Scheme);
                 Assert.True(
                     (uri.Host == "github.com" && uri.AbsolutePath.StartsWith("/giovannimazza/haptic-bridge")) ||
-                    (uri.Host == "paypal.me" && uri.AbsolutePath == "/giovanbattistamazza") ||
                     (uri.Host == "ko-fi.com" && uri.AbsolutePath == "/giovanbattistamazza"),
                     $"unexpected link {uri}");
             }
