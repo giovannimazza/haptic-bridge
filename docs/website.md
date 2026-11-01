@@ -42,7 +42,7 @@ The deploy step leaves the site reachable only on the server itself. How it is e
 
 - **Only your devices** (Tailscale Serve): reachable from machines in the same tailnet.
 - **The whole Internet** (Tailscale Funnel, or any reverse proxy): anyone with the address can open it.
-- **GitHub Pages**: the pages use only relative links and a meta policy, so `site/` can also be published there without a server at all.
+- **GitHub Pages**: `.github/workflows/pages.yml` publishes the pages (not `nginx.conf` or the deploy script) on every change to `site/` on `main`. The pages use only relative links and a meta policy, so no server is needed. Once, in the repository settings, Pages must be set to use "GitHub Actions" as its source.
 
 Check what a machine already exposes before adding anything (`tailscale serve status`), and never put a service on a public port that another service already uses.
 
