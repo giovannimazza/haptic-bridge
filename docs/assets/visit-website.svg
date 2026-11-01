@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="56" viewBox="0 0 320 56" role="img" aria-label="Visit the website">
+  <defs>
+    <linearGradient id="w" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9588F5"/>
+      <stop offset="1" stop-color="#6A5AE0"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="56" rx="14" fill="url(#w)"/>
+  <!-- globe -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round">
+    <circle cx="34" cy="28" r="14"/>
+    <ellipse cx="34" cy="28" rx="6" ry="14"/>
+    <path d="M20 28h28M23 20h22M23 36h22"/>
+  </g>
+  <text x="62" y="35" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">Visit the website</text>
+</svg>
