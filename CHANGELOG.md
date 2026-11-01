@@ -3,6 +3,10 @@
 All notable changes. Versions are the GitHub releases. A section marked "not released yet" is work on `main` that has no release.
 The version number is set in `app/app.csproj` and `installer/HapticGamingBridge.iss`; the release workflow refuses a tag that does not match it.
 
+## Unreleased
+
+- **New app icon**: a mouse in the centre with controller grips at the sides and vibration waves, in the app, the installer and the Logi plugin package. The plugin package was rebuilt for the new icon, so it is no longer identical to the one in 1.2.0.
+
 ## 1.2.0
 
 - **Automatic updates**: the app looks for a newer release on GitHub and offers it in a banner. *Update now* downloads the installer, checks its SHA-256 against the checksum GitHub published for that release file, and installs it; the app restarts by itself. *Skip this version* and *What's new* are there too. Under **Info > Updates** you can check by hand, turn the automatic check off (the app then makes no network connections at all), or let it install updates when it starts. See [docs/updates.md](docs/updates.md).
