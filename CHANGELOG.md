@@ -3,9 +3,11 @@
 All notable changes. Versions are the GitHub releases. A section marked "not released yet" is work on `main` that has no release.
 The version number is set in `app/app.csproj` and `installer/HapticGamingBridge.iss`; the release workflow refuses a tag that does not match it.
 
-## Unreleased
+## 1.2.1
 
-- **New app icon**: a mouse in the centre with controller grips at the sides and vibration waves, in the app, the installer and the Logi plugin package. The plugin package was rebuilt for the new icon, so it is no longer identical to the one in 1.2.0.
+- **New app icon**: a mouse in the centre with controller grips at the sides and vibration waves, in the app, the installer and the Logi plugin package. The plugin package was rebuilt for the new icon, so it is no longer identical to the one in 1.2.0. Its code is unchanged.
+- The build no longer shows a warning about an obsolete .NET call.
+- This is the first release that reaches people through the in-app updater: a 1.2.0 installation offers it in the banner, downloads it, checks its checksum and restarts into it.
 
 ## 1.2.0
 

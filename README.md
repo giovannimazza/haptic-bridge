@@ -218,7 +218,7 @@ dotnet publish app -c Release -r win-x64 --self-contained true -o publish
 ISCC installer\HapticGamingBridge.iss
 ```
 
-The output is `dist\HapticGamingBridge-Setup-1.1.0.exe` (the version comes from `app/app.csproj` and `installer/HapticGamingBridge.iss`; a test checks they agree). The app is published self-contained, so users do not need to install .NET. The plugin package it bundles is `installer/plugin/HapticGamingBridge_1_0.lplug4`; rebuild it after plugin changes (see [docs/code-signing.md](docs/code-signing.md)). The same build runs on GitHub Actions when you push a tag.
+The output is `dist\HapticGamingBridge-Setup-<version>.exe` (the version comes from `app/app.csproj` and `installer/HapticGamingBridge.iss`; a test checks they agree). The app is published self-contained, so users do not need to install .NET. The plugin package it bundles is `installer/plugin/HapticGamingBridge_1_0.lplug4`; rebuild it after plugin changes (see [docs/code-signing.md](docs/code-signing.md)). The same build runs on GitHub Actions when you push a tag.
 
 ## Layout
 

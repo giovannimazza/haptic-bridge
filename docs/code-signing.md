@@ -27,7 +27,7 @@
 5. **In GitHub** (repository settings, Secrets and variables, Actions):
    - Secret `SIGNPATH_API_TOKEN` = the API token.
    - Variable `SIGNPATH_ORGANIZATION_ID` = your SignPath organization ID.
-6. **Release:** push a tag such as `v1.1.0` (it must match the version in `app/app.csproj`, the workflow checks this). The workflow runs the tests, builds the app, submits the app files for signing, builds the installer with the signed files, submits the installer, and creates the GitHub release. You approve each signing request in SignPath.
+6. **Release:** push a tag such as `v<version>` (it must match the version in `app/app.csproj`, the workflow checks this). The workflow runs the tests, builds the app, submits the app files for signing, builds the installer with the signed files, submits the installer, and creates the GitHub release. You approve each signing request in SignPath.
 7. **Update `README.md`**: change the status line under "Code signing policy" once the first signed release is out.
 
 If you chose different slugs in SignPath, change them in the workflow (`project-slug`, `signing-policy-slug`, `artifact-configuration-slug`).
