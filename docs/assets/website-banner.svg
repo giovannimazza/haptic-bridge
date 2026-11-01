@@ -1,18 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="56" viewBox="0 0 320 56" role="img" aria-label="Visit the website">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#2B2460"/>
-      <stop offset="1" stop-color="#151A2E"/>
-    </linearGradient>
-    <linearGradient id="ac" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="w" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#9588F5"/>
       <stop offset="1" stop-color="#6A5AE0"/>
     </linearGradient>
   </defs>
-  <rect x="1" y="1" width="318" height="54" rx="13" fill="url(#bg)" stroke="#7C6CF0" stroke-width="2"/>
-  <!-- round badge with an arrow -->
-  <circle cx="33" cy="28" r="17" fill="url(#ac)"/>
-  <path d="M26 28h14M34.5 21.5L41 28l-6.5 6.5" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="62" y="26" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">Visit the website</text>
-  <text x="62" y="42" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#B9B0FF">Download · How it works · FAQ</text>
+  <rect width="320" height="56" rx="14" fill="url(#w)"/>
+  <!-- arrow into a tray, same size and position as the cup on the Ko-fi banner -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M33 12v22M23.5 25.5L33 35l9.5-9.5"/>
+    <path d="M17 44v1.5h32V44"/>
+  </g>
+  <text x="72" y="35" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">Visit the website</text>
 </svg>
